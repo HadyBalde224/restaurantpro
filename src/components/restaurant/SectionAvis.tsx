@@ -36,9 +36,14 @@ export default function SectionAvis({ avis }: { avis: Avis[] }) {
           </div>
         </Apparition>
 
-        <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-16 flex flex-wrap justify-center gap-6">
           {approuves.map((a, index) => (
-            <Apparition key={a.id} delai={index * 80}>
+            <Apparition
+              key={a.id}
+              delai={index * 80}
+              echelle
+              className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]"
+            >
               <article className="relative h-full overflow-hidden rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
                 <span
                   className="pointer-events-none absolute -top-4 right-4 text-8xl leading-none text-white/10"

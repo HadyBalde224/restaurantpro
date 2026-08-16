@@ -108,7 +108,7 @@ export default function SectionMenu({
                 .slice()
                 .sort((a, b) => a.ordre - b.ordre)
                 .map((plat, index) => (
-                  <Apparition key={plat.id} delai={index * 80}>
+                  <Apparition key={plat.id} delai={index * 80} echelle>
                     <CartePlat plat={plat} devise={devise} />
                   </Apparition>
                 ))}

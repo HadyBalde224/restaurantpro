@@ -31,6 +31,16 @@ h4 {
   font-family: var(--font-titre), Georgia, serif;
 }
 
+/* L'admin est un outil de gestion, pas le site vitrine : il garde la police
+   texte (Karla) partout, y compris pour les titres, plutôt que la Playfair
+   décorative réservée à l'identité du restaurant sur le site public. */
+.zone-admin h1,
+.zone-admin h2,
+.zone-admin h3,
+.zone-admin h4 {
+  font-family: var(--font-texte), Arial, Helvetica, sans-serif;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -58,6 +68,19 @@ h4 {
 
 .anim-rebond {
   animation: rebondLent 2.5s ease-in-out infinite;
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+.anim-ken-burns {
+  animation: kenBurns 6.5s ease-out forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -6,10 +6,12 @@ export default function Apparition({
   children,
   delai = 0,
   className = "",
+  echelle = false,
 }: {
   children: ReactNode;
   delai?: number;
   className?: string;
+  echelle?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -36,7 +38,9 @@ export default function Apparition({
     <div
       ref={ref}
       className={`transition-all duration-700 ease-out ${
-        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+        visible
+          ? "opacity-100 translate-y-0 scale-100"
+          : `opacity-0 translate-y-6 ${echelle ? "scale-95" : ""}`
       } ${className}`}
       style={{ transitionDelay: `${delai}ms` }}
     >

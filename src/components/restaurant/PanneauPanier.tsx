@@ -28,7 +28,7 @@ export default function PanneauPanier({
   };
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end sm:items-end sm:justify-end">
+    <div className="fixed inset-0 z-60 flex items-end sm:items-end sm:justify-end">
       <div
         className="absolute inset-0 bg-black/40"
         onClick={onFermer}
@@ -44,7 +44,7 @@ export default function PanneauPanier({
             type="button"
             onClick={onFermer}
             aria-label="Fermer"
-            className="text-2xl leading-none text-gray-400 transition-colors duration-200 hover:text-gray-600"
+            className="flex h-11 w-11 items-center justify-center text-2xl leading-none text-gray-400 transition-colors duration-200 hover:text-gray-600"
           >
             &times;
           </button>
@@ -63,12 +63,12 @@ export default function PanneauPanier({
                       {l.plat.prix} {restaurant.devise} / unité
                     </p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <button
                       type="button"
                       onClick={() => changerQuantite(l.plat.id, l.quantite - 1)}
                       aria-label="Diminuer la quantité"
-                      className="flex h-7 w-7 items-center justify-center rounded-full border border-black/10 transition-colors duration-200 hover:bg-black/5"
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 transition-colors duration-200 hover:bg-black/5"
                     >
                       −
                     </button>
@@ -77,7 +77,7 @@ export default function PanneauPanier({
                       type="button"
                       onClick={() => changerQuantite(l.plat.id, l.quantite + 1)}
                       aria-label="Augmenter la quantité"
-                      className="flex h-7 w-7 items-center justify-center rounded-full border border-black/10 transition-colors duration-200 hover:bg-black/5"
+                      className="flex h-11 w-11 items-center justify-center rounded-full border border-black/10 transition-colors duration-200 hover:bg-black/5"
                     >
                       +
                     </button>

@@ -32,15 +32,15 @@ export default function FormulaireReservation({
           Votre nom
         </label>
         <input id="nom_client" name="nom_client" required minLength={2}
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30 outline-none transition" />
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) focus:ring-2 focus:ring-(--accent)/30 outline-none transition" />
       </div>
 
       <div>
         <label htmlFor="telephone" className="block text-sm font-semibold mb-1">
           Téléphone
         </label>
-        <input id="telephone" name="telephone" type="tel" required
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30 outline-none transition" />
+        <input id="telephone" name="telephone" type="tel" inputMode="tel" required
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) focus:ring-2 focus:ring-(--accent)/30 outline-none transition" />
       </div>
 
       <div>
@@ -49,7 +49,7 @@ export default function FormulaireReservation({
         </label>
         <input id="date_resa" name="date_resa" type="date" required
           min={new Date().toISOString().split("T")[0]}
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] outline-none transition" />
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) outline-none transition" />
       </div>
 
       <div>
@@ -57,15 +57,15 @@ export default function FormulaireReservation({
           Heure
         </label>
         <input id="heure_resa" name="heure_resa" type="time" required
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] outline-none transition" />
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) outline-none transition" />
       </div>
 
       <div>
         <label htmlFor="nb_personnes" className="block text-sm font-semibold mb-1">
           Nombre de personnes
         </label>
-        <input id="nb_personnes" name="nb_personnes" type="number" min={1} max={50} defaultValue={2} required
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] outline-none transition" />
+        <input id="nb_personnes" name="nb_personnes" type="number" inputMode="numeric" min={1} max={50} defaultValue={2} required
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) outline-none transition" />
       </div>
 
       <div className="md:col-span-2">
@@ -74,7 +74,7 @@ export default function FormulaireReservation({
         </label>
         <textarea id="message" name="message" rows={3}
           placeholder="Anniversaire, terrasse, allergies..."
-          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--accent)] outline-none transition" />
+          className="w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-(--accent) outline-none transition" />
       </div>
 
       {etat && !etat.succes && (
@@ -82,7 +82,7 @@ export default function FormulaireReservation({
       )}
 
       <button type="submit" disabled={enCours}
-        className="md:col-span-2 rounded-full bg-[var(--accent)] px-8 py-4 font-bold text-lg transition hover:brightness-110 hover:-translate-y-0.5 disabled:opacity-60 disabled:translate-y-0">
+        className="md:col-span-2 rounded-full bg-(--accent) px-8 py-4 font-bold text-lg transition hover:brightness-110 hover:-translate-y-0.5 disabled:opacity-60 disabled:translate-y-0">
         {enCours ? "Envoi en cours..." : "Demander une réservation"}
       </button>
     </form>

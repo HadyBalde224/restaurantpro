@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { IconeDeconnexion } from "@/components/admin/Icones";
 import { createClient } from "@/lib/supabase/client";
 
 export default function BoutonDeconnexion() {
@@ -17,8 +18,9 @@ export default function BoutonDeconnexion() {
     <button
       type="button"
       onClick={seDeconnecter}
-      className="text-sm font-medium text-gray-500 transition-colors duration-200 hover:text-gray-900"
+      className="flex min-h-11 items-center gap-2 text-sm font-medium text-gray-500 transition-colors duration-200 hover:text-gray-900"
     >
+      <IconeDeconnexion size={16} />
       Déconnexion
     </button>
   );

@@ -1,7 +1,9 @@
+import type { CSSProperties } from "react";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Restaurant } from "@/lib/types";
-import BoutonDeconnexion from "@/components/admin/BoutonDeconnexion";
+import Sidebar from "@/components/admin/Sidebar";
+import EnteteContenu from "@/components/admin/EnteteContenu";
 
 export default async function LayoutAdmin({
   children,
@@ -27,25 +29,18 @@ export default async function LayoutAdmin({
     .eq("id", profil.restaurant_id)
     .single<Restaurant>();
 
+  const variablesTheme = {
+    "--primaire": restaurant?.couleur_primaire ?? "#171717",
+    "--accent": restaurant?.couleur_accent ?? "#171717",
+  } as CSSProperties;
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b px-6 py-4 flex items-center justify-between">
-        <div>
-          <p className="font-bold text-lg">{restaurant?.nom}</p>
-          <p className="text-sm text-gray-500">Espace de gestion</p>
-        </div>
-        <div className="flex items-center gap-6">
-          <nav className="flex gap-6 text-sm font-medium">
-            <a href="/admin">Tableau de bord</a>
-            <a href="/admin/menu">Menu</a>
-            <a href="/admin/reservations">Réservations</a>
-            <a href="/admin/avis">Avis</a>
-            <a href="/admin/reglages">Réglages</a>
-          </nav>
-          <BoutonDeconnexion />
-        </div>
-      </header>
-      <main className="p-6 max-w-6xl mx-auto">{children}</main>
+    <div className="zone-admin min-h-screen bg-gray-50" style={variablesTheme}>
+      <Sidebar nom={restaurant?.nom ?? ""} nomComplet={profil.nom_complet ?? ""} />
+      <div className="lg:pl-60">
+        <EnteteContenu nom={restaurant?.nom ?? ""} />
+        <main className="mx-auto max-w-6xl p-6">{children}</main>
+      </div>
     </div>
   );
 }

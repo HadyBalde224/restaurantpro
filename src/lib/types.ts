@@ -4,7 +4,7 @@ export interface Restaurant {
   nom: string;
   description: string;
   logo_url: string | null;
-  photo_hero_url: string | null;
+  photos_hero: string[];
   couleur_primaire: string;
   couleur_accent: string;
   telephone: string;
@@ -23,6 +23,7 @@ export interface Restaurant {
 
 export interface Plat {
   id: string;
+  categorie_id: string;
   nom: string;
   description: string;
   prix: number;
@@ -44,5 +45,19 @@ export interface Avis {
   note: number;
   commentaire: string;
   approuve: boolean;
+  cree_le: string;
+}
+
+export type StatutReservation = "en_attente" | "confirmee" | "refusee" | "annulee";
+
+export interface Reservation {
+  id: string;
+  nom_client: string;
+  telephone: string;
+  date_resa: string;
+  heure_resa: string;
+  nb_personnes: number;
+  message: string;
+  statut: StatutReservation;
   cree_le: string;
 }

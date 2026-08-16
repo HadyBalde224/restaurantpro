@@ -18,7 +18,7 @@ export default function BoutonAjouterPanier({ plat }: { plat: Plat }) {
     <button
       type="button"
       onClick={handleClick}
-      className="mt-3 w-full rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:brightness-110"
+      className="mt-3 min-h-11 w-full rounded-full px-4 text-sm font-semibold text-white transition-all duration-200 hover:brightness-110"
       style={{ background: "var(--accent)" }}
     >
       {ajoute ? "✓ Ajouté" : "+ Ajouter"}
