@@ -8,11 +8,19 @@ const TITRES: Record<string, string> = {
   "/admin/reservations": "Réservations",
   "/admin/avis": "Avis",
   "/admin/reglages": "Réglages",
+  "/admin/plateforme": "Tableau de bord",
+  "/admin/plateforme/restaurants/nouveau": "Nouveau restaurant",
 };
+
+function titreDepuisPathname(pathname: string): string {
+  if (TITRES[pathname]) return TITRES[pathname];
+  if (pathname.startsWith("/admin/plateforme/restaurants/")) return "Fiche restaurant";
+  return "";
+}
 
 export default function EnteteContenu({ nom }: { nom: string }) {
   const pathname = usePathname();
-  const titre = TITRES[pathname] ?? "";
+  const titre = titreDepuisPathname(pathname);
   const initiale = nom.trim().charAt(0).toUpperCase() || "?";
 
   return (

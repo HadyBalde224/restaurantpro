@@ -56,7 +56,7 @@ export default function CarrouselHero({ photos, nom }: { photos: string[]; nom: 
 
       {photos.length > 1 && (
         <div
-          className="absolute bottom-20 left-1/2 z-20 flex -translate-x-1/2 gap-2"
+          className="absolute bottom-46 left-1/2 z-20 flex -translate-x-1/2 gap-2 sm:bottom-20"
           aria-hidden="true"
         >
           {photos.map((_, i) => (

@@ -6,12 +6,18 @@ export default function ConfirmDialog({
   enCours,
   onAnnuler,
   onConfirmer,
+  labelConfirmer = "Supprimer",
+  labelEnCours = "Suppression...",
+  variante = "danger",
 }: {
   titre: string;
   description: string;
   enCours: boolean;
   onAnnuler: () => void;
   onConfirmer: () => void;
+  labelConfirmer?: string;
+  labelEnCours?: string;
+  variante?: "danger" | "primaire";
 }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -33,9 +39,12 @@ export default function ConfirmDialog({
             type="button"
             onClick={onConfirmer}
             disabled={enCours}
-            className="min-h-11 flex-1 rounded-xl bg-red-600 font-semibold text-white transition hover:bg-red-700 disabled:opacity-60"
+            className={`min-h-11 flex-1 rounded-xl font-semibold transition disabled:opacity-60 ${
+              variante === "danger" ? "bg-red-600 text-white hover:bg-red-700" : "hover:opacity-90"
+            }`}
+            style={variante === "primaire" ? { background: "var(--accent)", color: "var(--primaire)" } : undefined}
           >
-            {enCours ? "Suppression..." : "Supprimer"}
+            {enCours ? labelEnCours : labelConfirmer}
           </button>
         </div>
       </div>

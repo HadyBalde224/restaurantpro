@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { enregistrerContact } from "@/app/admin/(protege)/reglages/actions";
 import BarreActions from "@/components/admin/reglages/BarreActions";
+import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
+import { IconeTelephone } from "@/components/admin/Icones";
 import type { Restaurant } from "@/lib/types";
 
 export default function CarteContact({ restaurant }: { restaurant: Restaurant }) {
@@ -25,7 +27,7 @@ export default function CarteContact({ restaurant }: { restaurant: Restaurant })
 
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-bold text-gray-900">Contact</h2>
+      <EnteteCarte icone={IconeTelephone} couleur="text-blue-600" fond="bg-blue-50" titre="Informations de contact" />
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">

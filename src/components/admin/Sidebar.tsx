@@ -11,8 +11,10 @@ import {
   IconeReglages,
   IconeBurger,
   IconeCroix,
+  IconePlus,
 } from "@/components/admin/Icones";
 import BoutonDeconnexion from "@/components/admin/BoutonDeconnexion";
+import type { RoleAdmin } from "@/lib/types";
 
 const LIENS = [
   { href: "/admin", libelle: "Tableau de bord", Icone: IconeDashboard },
@@ -22,12 +24,25 @@ const LIENS = [
   { href: "/admin/reglages", libelle: "Réglages", Icone: IconeReglages },
 ];
 
-function ContenuNav({ pathname, onNaviguer }: { pathname: string; onNaviguer?: () => void }) {
-  const estActif = (href: string) => (href === "/admin" ? pathname === href : pathname.startsWith(href));
+const LIENS_PLATEFORME = [
+  { href: "/admin/plateforme", libelle: "Tableau de bord", Icone: IconeDashboard },
+  { href: "/admin/plateforme/restaurants/nouveau", libelle: "Nouveau restaurant", Icone: IconePlus },
+];
+
+function ContenuNav({
+  pathname,
+  onNaviguer,
+  liens,
+}: {
+  pathname: string;
+  onNaviguer?: () => void;
+  liens: typeof LIENS;
+}) {
+  const estActif = (href: string) => (href === pathname ? true : href !== "/admin" && href !== "/admin/plateforme" && pathname.startsWith(href));
 
   return (
     <nav className="flex flex-col gap-1 px-3">
-      {LIENS.map(({ href, libelle, Icone }) => {
+      {liens.map(({ href, libelle, Icone }) => {
         const actif = estActif(href);
         return (
           <Link
@@ -47,7 +62,15 @@ function ContenuNav({ pathname, onNaviguer }: { pathname: string; onNaviguer?: (
   );
 }
 
-function CompteConnecte({ nom, nomComplet }: { nom: string; nomComplet: string }) {
+function CompteConnecte({
+  nom,
+  nomComplet,
+  estSuperAdmin,
+}: {
+  nom: string;
+  nomComplet: string;
+  estSuperAdmin: boolean;
+}) {
   const libelle = nomComplet.trim() || nom;
   const initiale = libelle.trim().charAt(0).toUpperCase() || "?";
 
@@ -61,15 +84,26 @@ function CompteConnecte({ nom, nomComplet }: { nom: string; nomComplet: string }
       </div>
       <div className="min-w-0">
         <p className="truncate text-sm font-semibold text-gray-900">{libelle}</p>
-        <p className="text-xs text-gray-500">Propriétaire</p>
+        <p className="text-xs text-gray-500">{estSuperAdmin ? "Super-admin" : "Propriétaire"}</p>
       </div>
     </div>
   );
 }
 
-export default function Sidebar({ nom, nomComplet }: { nom: string; nomComplet: string }) {
+export default function Sidebar({
+  nom,
+  nomComplet,
+  role,
+}: {
+  nom: string;
+  nomComplet: string;
+  role: RoleAdmin;
+}) {
   const [ouvert, setOuvert] = useState(false);
   const pathname = usePathname();
+  const estSuperAdmin = role === "super_admin";
+  const liens = estSuperAdmin ? LIENS_PLATEFORME : LIENS;
+  const sousTitre = estSuperAdmin ? "Administration de la plateforme" : "Espace de gestion";
 
   return (
     <>
@@ -77,15 +111,20 @@ export default function Sidebar({ nom, nomComplet }: { nom: string; nomComplet: 
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:w-60 lg:flex-col lg:border-r lg:border-black/5 lg:bg-white">
         <div className="px-6 py-5">
           <p className="font-bold text-lg text-gray-900">{nom}</p>
-          <p className="text-sm text-gray-500">Espace de gestion</p>
+          <p className="text-sm text-gray-500">{sousTitre}</p>
         </div>
 
         <div className="flex-1 overflow-y-auto py-2">
-          <ContenuNav pathname={pathname} />
+          {estSuperAdmin && (
+            <p className="px-6 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              Plateforme
+            </p>
+          )}
+          <ContenuNav pathname={pathname} liens={liens} />
         </div>
 
         <div className="border-t border-black/5 px-3 py-3">
-          <CompteConnecte nom={nom} nomComplet={nomComplet} />
+          <CompteConnecte nom={nom} nomComplet={nomComplet} estSuperAdmin={estSuperAdmin} />
           <div className="mt-1 px-3">
             <BoutonDeconnexion />
           </div>
@@ -96,7 +135,7 @@ export default function Sidebar({ nom, nomComplet }: { nom: string; nomComplet: 
       <header className="flex items-center justify-between border-b border-black/5 bg-white px-4 py-3 lg:hidden">
         <div>
           <p className="font-bold text-gray-900">{nom}</p>
-          <p className="text-xs text-gray-500">Espace de gestion</p>
+          <p className="text-xs text-gray-500">{sousTitre}</p>
         </div>
         <button
           type="button"
@@ -127,7 +166,7 @@ export default function Sidebar({ nom, nomComplet }: { nom: string; nomComplet: 
           <div className="flex items-center justify-between px-6 py-5">
             <div>
               <p className="font-bold text-gray-900">{nom}</p>
-              <p className="text-sm text-gray-500">Espace de gestion</p>
+              <p className="text-sm text-gray-500">{sousTitre}</p>
             </div>
             <button
               type="button"
@@ -140,11 +179,16 @@ export default function Sidebar({ nom, nomComplet }: { nom: string; nomComplet: 
           </div>
 
           <div className="flex-1 overflow-y-auto py-2">
-            <ContenuNav pathname={pathname} onNaviguer={() => setOuvert(false)} />
+            {estSuperAdmin && (
+              <p className="px-6 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                Plateforme
+              </p>
+            )}
+            <ContenuNav pathname={pathname} onNaviguer={() => setOuvert(false)} liens={liens} />
           </div>
 
           <div className="border-t border-black/5 px-3 py-3">
-            <CompteConnecte nom={nom} nomComplet={nomComplet} />
+            <CompteConnecte nom={nom} nomComplet={nomComplet} estSuperAdmin={estSuperAdmin} />
             <div className="mt-1 px-3">
               <BoutonDeconnexion />
             </div>

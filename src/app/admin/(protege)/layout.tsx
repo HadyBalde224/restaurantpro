@@ -17,17 +17,26 @@ export default async function LayoutAdmin({
 
   const { data: profil } = await supabase
     .from("profils_admin")
-    .select("restaurant_id, nom_complet")
+    .select("restaurant_id, nom_complet, role")
     .eq("id", user.id)
     .single();
 
   if (!profil) redirect("/admin/login");
 
-  const { data: restaurant } = await supabase
-    .from("restaurants")
-    .select("*")
-    .eq("id", profil.restaurant_id)
-    .single<Restaurant>();
+  const estSuperAdmin = profil.role === "super_admin";
+
+  // Le super-admin n'a pas de restaurant_id : on ne tente la requête que
+  // pour un profil restaurateur normal, sinon .eq("id", null) ne renverrait
+  // simplement rien d'utile.
+  const { data: restaurant } = profil.restaurant_id
+    ? await supabase
+        .from("restaurants")
+        .select("*")
+        .eq("id", profil.restaurant_id)
+        .single<Restaurant>()
+    : { data: null };
+
+  const nomAffiche = estSuperAdmin ? "RestaurantPro" : (restaurant?.nom ?? "");
 
   const variablesTheme = {
     "--primaire": restaurant?.couleur_primaire ?? "#171717",
@@ -36,9 +45,9 @@ export default async function LayoutAdmin({
 
   return (
     <div className="zone-admin min-h-screen bg-gray-50" style={variablesTheme}>
-      <Sidebar nom={restaurant?.nom ?? ""} nomComplet={profil.nom_complet ?? ""} />
+      <Sidebar nom={nomAffiche} nomComplet={profil.nom_complet ?? ""} role={profil.role ?? "admin"} />
       <div className="lg:pl-60">
-        <EnteteContenu nom={restaurant?.nom ?? ""} />
+        <EnteteContenu nom={nomAffiche} />
         <main className="mx-auto max-w-6xl p-6">{children}</main>
       </div>
     </div>

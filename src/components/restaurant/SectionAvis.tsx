@@ -1,6 +1,8 @@
 import type { Avis } from "@/lib/types";
 import Apparition from "@/components/Apparition";
 import TitreSection from "@/components/restaurant/TitreSection";
+import FormulaireAvis from "@/components/restaurant/FormulaireAvis";
+import CarrouselAvis from "@/components/restaurant/CarrouselAvis";
 
 function Etoiles({ note }: { note: number }) {
   return (
@@ -12,12 +14,16 @@ function Etoiles({ note }: { note: number }) {
   );
 }
 
-export default function SectionAvis({ avis }: { avis: Avis[] }) {
+export default function SectionAvis({
+  avis,
+  restaurantId,
+  slug,
+}: {
+  avis: Avis[];
+  restaurantId: string;
+  slug: string;
+}) {
   const approuves = avis.filter((a) => a.approuve);
-  if (approuves.length === 0) return null;
-
-  const moyenne =
-    approuves.reduce((somme, a) => somme + a.note, 0) / approuves.length;
 
   return (
     <section
@@ -26,41 +32,33 @@ export default function SectionAvis({ avis }: { avis: Avis[] }) {
       style={{ background: "color-mix(in srgb, var(--primaire) 85%, black)" }}
     >
       <div className="mx-auto w-full max-w-6xl">
-        <Apparition>
-          <TitreSection>Avis de nos clients</TitreSection>
-          <div className="mt-5 flex items-center justify-center gap-2">
-            <Etoiles note={moyenne} />
-            <span className="text-sm text-white/70">
-              {moyenne.toFixed(1)} / 5 · {approuves.length} avis
-            </span>
-          </div>
-        </Apparition>
+        {approuves.length === 0 ? (
+          <Apparition>
+            <TitreSection>Avis de nos clients</TitreSection>
+            <p className="mx-auto mt-5 max-w-md text-center text-white/80">
+              Soyez le premier à partager votre expérience ✨
+            </p>
 
-        <div className="mt-16 flex flex-wrap justify-center gap-6">
-          {approuves.map((a, index) => (
-            <Apparition
-              key={a.id}
-              delai={index * 80}
-              echelle
-              className="w-full sm:w-[calc(50%-0.75rem)] lg:w-[calc(33.333%-1rem)]"
-            >
-              <article className="relative h-full overflow-hidden rounded-2xl bg-white/5 p-6 ring-1 ring-white/10">
-                <span
-                  className="pointer-events-none absolute -top-4 right-4 text-8xl leading-none text-white/10"
-                  style={{ fontFamily: "var(--font-titre)" }}
-                  aria-hidden="true"
-                >
-                  &rdquo;
+            <div className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-6 text-gray-900 shadow-sm sm:p-8">
+              <FormulaireAvis restaurantId={restaurantId} slug={slug} />
+            </div>
+          </Apparition>
+        ) : (
+          <>
+            <Apparition>
+              <TitreSection>Avis de nos clients</TitreSection>
+              <div className="mt-5 flex items-center justify-center gap-2">
+                <Etoiles note={approuves.reduce((somme, a) => somme + a.note, 0) / approuves.length} />
+                <span className="text-sm text-white/70">
+                  {(approuves.reduce((somme, a) => somme + a.note, 0) / approuves.length).toFixed(1)} / 5 ·{" "}
+                  {approuves.length} avis
                 </span>
-                <Etoiles note={a.note} />
-                <p className="relative mt-3 text-white/85">« {a.commentaire} »</p>
-                <p className="relative mt-4 text-sm font-semibold text-white">
-                  {a.nom_client}
-                </p>
-              </article>
+              </div>
             </Apparition>
-          ))}
-        </div>
+
+            <CarrouselAvis avis={approuves} />
+          </>
+        )}
       </div>
     </section>
   );

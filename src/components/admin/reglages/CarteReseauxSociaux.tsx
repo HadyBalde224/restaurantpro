@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { enregistrerReseauxSociaux } from "@/app/admin/(protege)/reglages/actions";
 import BarreActions from "@/components/admin/reglages/BarreActions";
+import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
+import { IconePartage } from "@/components/admin/Icones";
 import type { Restaurant } from "@/lib/types";
 
 export default function CarteReseauxSociaux({ restaurant }: { restaurant: Restaurant }) {
@@ -22,7 +24,7 @@ export default function CarteReseauxSociaux({ restaurant }: { restaurant: Restau
 
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-bold text-gray-900">Réseaux sociaux</h2>
+      <EnteteCarte icone={IconePartage} couleur="text-green-600" fond="bg-green-50" titre="Réseaux sociaux" />
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">

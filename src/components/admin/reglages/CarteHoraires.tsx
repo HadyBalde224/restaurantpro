@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { enregistrerHoraires } from "@/app/admin/(protege)/reglages/actions";
 import BarreActions from "@/components/admin/reglages/BarreActions";
+import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
+import { IconeHorloge } from "@/components/admin/Icones";
 
 const JOURS: { id: string; libelle: string }[] = [
   { id: "lundi", libelle: "Lundi" },
@@ -51,7 +53,7 @@ export default function CarteHoraires({ horaires }: { horaires: Record<string, s
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-bold text-gray-900">Horaires</h2>
+        <EnteteCarte icone={IconeHorloge} couleur="text-orange-600" fond="bg-orange-50" titre="Horaires" />
         <button
           type="button"
           onClick={copierLundiPartout}

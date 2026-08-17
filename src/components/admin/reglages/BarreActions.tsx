@@ -1,5 +1,7 @@
 "use client";
 
+import { IconeCoche } from "@/components/admin/Icones";
+
 export default function BarreActions({
   enCours,
   message,
@@ -13,8 +15,9 @@ export default function BarreActions({
         type="submit"
         disabled={enCours}
         style={{ background: "var(--accent)", color: "var(--primaire)" }}
-        className="min-h-11 rounded-xl px-5 font-semibold transition hover:opacity-90 disabled:opacity-60"
+        className="flex min-h-11 items-center gap-2 rounded-xl px-5 font-semibold transition hover:opacity-90 disabled:opacity-60"
       >
+        <IconeCoche size={16} />
         {enCours ? "Enregistrement..." : "Enregistrer"}
       </button>
       {message && (

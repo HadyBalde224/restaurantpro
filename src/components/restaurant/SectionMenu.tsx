@@ -83,7 +83,7 @@ export default function SectionMenu({
   categories: CategorieMenu[];
   devise: string;
 }) {
-  if (categories.length === 0) return null;
+  const totalPlats = categories.reduce((somme, c) => somme + c.plats.length, 0);
 
   return (
     <section id="menu" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-24 sm:px-8 md:py-32">
@@ -91,31 +91,39 @@ export default function SectionMenu({
         <TitreSection>Notre menu</TitreSection>
       </Apparition>
 
-      <div className="mt-16 space-y-16">
-        {categories.map((categorie) => (
-          <div key={categorie.id}>
-            <Apparition>
-              <h3
-                className="border-b-2 pb-2 text-2xl font-semibold"
-                style={{ borderColor: "var(--accent)" }}
-              >
-                {categorie.nom}
-              </h3>
-            </Apparition>
+      {totalPlats === 0 ? (
+        <Apparition>
+          <p className="mx-auto mt-16 max-w-md text-center text-lg text-gray-500">
+            Notre carte arrive bientôt 🍽️
+          </p>
+        </Apparition>
+      ) : (
+        <div className="mt-16 space-y-16">
+          {categories.map((categorie) => (
+            <div key={categorie.id}>
+              <Apparition>
+                <h3
+                  className="border-b-2 pb-2 text-center text-2xl font-semibold"
+                  style={{ borderColor: "var(--accent)" }}
+                >
+                  {categorie.nom}
+                </h3>
+              </Apparition>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {categorie.plats
-                .slice()
-                .sort((a, b) => a.ordre - b.ordre)
-                .map((plat, index) => (
-                  <Apparition key={plat.id} delai={index * 80} echelle>
-                    <CartePlat plat={plat} devise={devise} />
-                  </Apparition>
-                ))}
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {categorie.plats
+                  .slice()
+                  .sort((a, b) => a.ordre - b.ordre)
+                  .map((plat, index) => (
+                    <Apparition key={plat.id} delai={index * 80} echelle>
+                      <CartePlat plat={plat} devise={devise} />
+                    </Apparition>
+                  ))}
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 }

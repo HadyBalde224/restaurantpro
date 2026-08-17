@@ -48,6 +48,31 @@ export interface Avis {
   cree_le: string;
 }
 
+export interface PhotoGalerie {
+  id: string;
+  url: string;
+  legende: string;
+  ordre: number;
+}
+
+export type RoleAdmin = "admin" | "super_admin";
+
+export interface ProfilAdmin {
+  id: string;
+  restaurant_id: string | null;
+  nom_complet: string;
+  role: RoleAdmin;
+}
+
+export interface Abonnement {
+  id: string;
+  restaurant_id: string;
+  plan: string;
+  prix_mensuel: number;
+  paye_jusqu_au: string | null;
+  notes: string;
+}
+
 export type StatutReservation = "en_attente" | "confirmee" | "refusee" | "annulee";
 
 export interface Reservation {

@@ -3,11 +3,13 @@
 import { useMemo, useState } from "react";
 import type { Avis } from "@/lib/types";
 import CarteAvis from "@/components/admin/avis/CarteAvis";
+import AvisModal from "@/components/admin/avis/AvisModal";
 
 type Onglet = "attente" | "publies";
 
 export default function AvisAdmin({ avis }: { avis: Avis[] }) {
   const [onglet, setOnglet] = useState<Onglet>("attente");
+  const [modalOuverte, setModalOuverte] = useState(false);
   const [message, setMessage] = useState<{ texte: string; erreur: boolean } | null>(null);
 
   const afficherMessage = (texte: string, erreur = false) => {
@@ -32,12 +34,22 @@ export default function AvisAdmin({ avis }: { avis: Avis[] }) {
           <h1 className="text-2xl font-bold text-gray-900">Avis</h1>
           <p className="mt-1 text-gray-500">Modérez les avis laissés par vos clients.</p>
         </div>
-        {publies.length > 0 && (
-          <div className="rounded-2xl border border-black/5 bg-white px-5 py-3 text-right shadow-sm">
-            <p className="text-2xl font-bold text-amber-500">★ {noteMoyenne.toFixed(1)}</p>
-            <p className="text-xs text-gray-500">{publies.length} avis publiés</p>
-          </div>
-        )}
+        <div className="flex items-center gap-4">
+          {publies.length > 0 && (
+            <div className="rounded-2xl border border-black/5 bg-white px-5 py-3 text-right shadow-sm">
+              <p className="text-2xl font-bold text-amber-500">★ {noteMoyenne.toFixed(1)}</p>
+              <p className="text-xs text-gray-500">{publies.length} avis publiés</p>
+            </div>
+          )}
+          <button
+            type="button"
+            onClick={() => setModalOuverte(true)}
+            style={{ background: "var(--accent)", color: "var(--primaire)" }}
+            className="min-h-11 rounded-xl px-5 font-semibold transition hover:opacity-90"
+          >
+            + Ajouter un avis
+          </button>
+        </div>
       </div>
 
       {message && (
@@ -87,6 +99,10 @@ export default function AvisAdmin({ avis }: { avis: Avis[] }) {
           listeActive.map((a) => <CarteAvis key={a.id} avis={a} onMessage={afficherMessage} />)
         )}
       </div>
+
+      {modalOuverte && (
+        <AvisModal onFermer={() => setModalOuverte(false)} onMessage={afficherMessage} />
+      )}
     </div>
   );
 }

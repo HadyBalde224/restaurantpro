@@ -33,6 +33,65 @@ async function getContexteAdmin() {
   return { supabase, restaurantId: profil.restaurant_id, slug: restaurant.slug };
 }
 
+export async function creerAvisAdmin(donnees: {
+  nomClient: string;
+  note: number;
+  commentaire: string;
+}): Promise<ResultatAction> {
+  const ctx = await getContexteAdmin();
+  if (!ctx) return { succes: false, message: "Session expirée. Reconnectez-vous." };
+
+  const nomClient = donnees.nomClient?.trim();
+  const commentaire = donnees.commentaire?.trim();
+
+  if (!Number.isInteger(donnees.note) || donnees.note < 1 || donnees.note > 5) {
+    return { succes: false, message: "Merci de choisir une note entre 1 et 5 étoiles." };
+  }
+  if (!commentaire || commentaire.length < 5) {
+    return { succes: false, message: "Le commentaire doit contenir au moins 5 caractères." };
+  }
+
+  // La policy RLS d'insertion n'autorise que approuve = false (elle est
+  // pensée pour les visiteurs anonymes du site public). On insère donc
+  // ainsi, puis on publie immédiatement via la policy UPDATE — le même
+  // mécanisme qu'utilise déjà approuverAvis() ci-dessous.
+  const { data: nouvelAvis, error: erreurInsertion } = await ctx.supabase
+    .from("avis")
+    .insert({
+      restaurant_id: ctx.restaurantId,
+      nom_client: nomClient || "Visiteur anonyme",
+      note: donnees.note,
+      commentaire,
+      approuve: false,
+    })
+    .select("id")
+    .single();
+
+  if (erreurInsertion || !nouvelAvis) {
+    console.error("Erreur création avis admin :", erreurInsertion);
+    return { succes: false, message: "Impossible d'ajouter l'avis." };
+  }
+
+  const { error: erreurApprobation } = await ctx.supabase
+    .from("avis")
+    .update({ approuve: true })
+    .eq("id", nouvelAvis.id)
+    .eq("restaurant_id", ctx.restaurantId);
+
+  if (erreurApprobation) {
+    console.error("Erreur publication avis admin :", erreurApprobation);
+    revalidatePath("/admin/avis");
+    return {
+      succes: true,
+      message: "Avis ajouté, mais en attente de modération (approuvez-le manuellement).",
+    };
+  }
+
+  revalidatePath(`/${ctx.slug}`);
+  revalidatePath("/admin/avis");
+  return { succes: true, message: "Avis ajouté et publié sur le site." };
+}
+
 export async function approuverAvis(avisId: string): Promise<ResultatAction> {
   const ctx = await getContexteAdmin();
   if (!ctx) return { succes: false, message: "Session expirée. Reconnectez-vous." };

@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import type { Restaurant } from "@/lib/types";
+import { IconeReglages } from "@/components/admin/Icones";
 import CarteIdentite from "@/components/admin/reglages/CarteIdentite";
 import CarteContact from "@/components/admin/reglages/CarteContact";
 import CarteHoraires from "@/components/admin/reglages/CarteHoraires";
@@ -34,9 +35,17 @@ export default async function PageReglagesAdmin() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Réglages</h1>
-        <p className="mt-1 text-gray-500">Personnalisez les informations de votre restaurant.</p>
+      <div className="flex items-center gap-3">
+        <span
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full"
+          style={{ background: "var(--accent)", color: "var(--primaire)" }}
+        >
+          <IconeReglages size={20} />
+        </span>
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Réglages</h1>
+          <p className="mt-1 text-gray-500">Personnalisez les informations de votre restaurant.</p>
+        </div>
       </div>
 
       <CarteIdentite restaurant={restaurant} />

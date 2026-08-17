@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { enregistrerLocalisation } from "@/app/admin/(protege)/reglages/actions";
 import BarreActions from "@/components/admin/reglages/BarreActions";
+import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
+import { IconeCarte } from "@/components/admin/Icones";
 import type { Restaurant } from "@/lib/types";
 
 export default function CarteLocalisation({ restaurant }: { restaurant: Restaurant }) {
@@ -25,7 +27,7 @@ export default function CarteLocalisation({ restaurant }: { restaurant: Restaura
 
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-bold text-gray-900">Localisation</h2>
+      <EnteteCarte icone={IconeCarte} couleur="text-red-600" fond="bg-red-50" titre="Localisation" />
       <a
         href="https://www.google.com/maps"
         target="_blank"

@@ -3,6 +3,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { enregistrerIdentite } from "@/app/admin/(protege)/reglages/actions";
 import BarreActions from "@/components/admin/reglages/BarreActions";
+import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
+import { IconeBoutique } from "@/components/admin/Icones";
 import type { Restaurant } from "@/lib/types";
 
 export default function CarteIdentite({ restaurant }: { restaurant: Restaurant }) {
@@ -29,7 +31,7 @@ export default function CarteIdentite({ restaurant }: { restaurant: Restaurant }
 
   return (
     <section className="rounded-2xl border border-black/5 bg-white p-6 shadow-sm">
-      <h2 className="text-lg font-bold text-gray-900">Identité</h2>
+      <EnteteCarte icone={IconeBoutique} couleur="text-purple-600" fond="bg-purple-50" titre="Identité du restaurant" />
 
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
         <div>
