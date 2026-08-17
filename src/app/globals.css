@@ -41,6 +41,15 @@ h4 {
   font-family: var(--font-texte), Arial, Helvetica, sans-serif;
 }
 
+/* Identité propre à la marque NEHMA (page vitrine du produit) — distincte de
+   var(--primaire)/var(--accent), qui appartiennent au thème du restaurant
+   affiché sur /[slug] et n'ont rien à voir avec la marque NEHMA elle-même. */
+.zone-marketing {
+  --or: #c9a86a;
+  --fond: #14110f;
+  --surface: #1f1a16;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;

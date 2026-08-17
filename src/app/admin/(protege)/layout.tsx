@@ -36,7 +36,7 @@ export default async function LayoutAdmin({
         .single<Restaurant>()
     : { data: null };
 
-  const nomAffiche = estSuperAdmin ? "RestaurantPro" : (restaurant?.nom ?? "");
+  const nomAffiche = estSuperAdmin ? "NEHMA" : (restaurant?.nom ?? "");
 
   const variablesTheme = {
     "--primaire": restaurant?.couleur_primaire ?? "#171717",

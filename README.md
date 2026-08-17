@@ -1,4 +1,4 @@
-# RestaurantPro
+# NEHMA
 
 SaaS multi-tenant pour restaurants au Maroc, en Guinée et en Afrique francophone. Chaque restaurant client obtient un site public professionnel (menu numérique, réservations, avis, commande WhatsApp) et un espace admin pour tout gérer lui-même.
 
@@ -25,7 +25,7 @@ NEXT_PUBLIC_SUPABASE_URL=...
 NEXT_PUBLIC_SUPABASE_ANON_KEY=...
 ```
 
-Puis ouvre [http://localhost:3000/dar-zayna](http://localhost:3000/dar-zayna) (restaurant de démonstration).
+Puis ouvre [http://localhost:3000/weltare](http://localhost:3000/weltare) (restaurant de démonstration).
 
 ## Fonctionnalités
 

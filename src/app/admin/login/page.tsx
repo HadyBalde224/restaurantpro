@@ -36,7 +36,7 @@ export default function PageLogin() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-sm rounded-2xl border border-black/5 bg-white p-8 shadow-sm">
-        <h1 className="text-center text-2xl font-bold text-gray-900">RestaurantPro</h1>
+        <h1 className="text-center text-2xl font-bold text-gray-900">NEHMA</h1>
         <p className="mt-1 text-center text-sm text-gray-500">Espace de gestion</p>
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-4">

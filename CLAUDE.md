@@ -1,10 +1,12 @@
 @AGENTS.md
 
-# RestaurantPro — Contexte du projet
+# NEHMA — Contexte du projet
 
 ## Ce qu'est ce projet
 
-RestaurantPro est un **produit SaaS multi-tenant** destiné à être vendu à de vrais restaurants au Maroc, en Guinée et en Afrique francophone. Chaque restaurant client obtient un site public professionnel (menu numérique, réservations, avis, commande WhatsApp) et un espace admin pour tout gérer lui-même.
+NEHMA est un **produit SaaS multi-tenant** destiné à être vendu à de vrais restaurants au Maroc, en Guinée et en Afrique francophone. Chaque restaurant client obtient un site public professionnel (menu numérique, réservations, avis, commande WhatsApp) et un espace admin pour tout gérer lui-même.
+
+⚠️ **Ne pas confondre** : « NEHMA » est le nom de la **plateforme/produit** (visible dans le titre du site, la page de connexion admin, l'en-tête du super-admin). Le restaurant de démonstration s'appelle **« Weltare »** (slug `weltare`) — c'est un restaurant client comme un autre dans la base, distinct du nom de la plateforme. Historique du slug de démo : `dar-zayna` → `nehma` → `weltare` (actuel).
 
 **Modèle économique** : frais d'installation (1 500–3 000 MAD) + abonnement mensuel (150–300 MAD/mois par restaurant).
 
@@ -42,7 +44,7 @@ Toute la sécurité repose sur la **Row Level Security (RLS)** de Supabase, déj
 - `avis` : restaurant_id, nom_client, note (1-5), commentaire, approuve
 - Storage : bucket `images` public en lecture, écriture limitée au dossier `{restaurant_id}/` de l'admin connecté
 
-Un restaurant de démo existe (slug actuel : **`nehma`** — a remplacé le `dar-zayna` initial, vérifier le slug réel en base avant de tester si un doute).
+Un restaurant de démo existe (slug actuel : **`weltare`** — a remplacé `nehma`, qui avait lui-même remplacé le `dar-zayna` initial ; vérifier le slug réel en base avant de tester si un doute).
 
 ## Structure du code actuelle
 

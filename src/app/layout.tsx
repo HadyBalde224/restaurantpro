@@ -15,7 +15,7 @@ const karla = Karla({
 });
 
 export const metadata: Metadata = {
-  title: "RestaurantPro",
+  title: "NEHMA",
   description: "Sites vitrines pour restaurants",
 };
 

@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { limiteDebitDepassee, obtenirIpVisiteur } from "@/lib/rateLimit";
 
 export type EtatReservation = {
   succes: boolean;
@@ -11,6 +12,12 @@ export async function creerReservation(
   _etatPrecedent: EtatReservation | null,
   formData: FormData
 ): Promise<EtatReservation> {
+  // 0. Frein anti-spam basique : max 5 réservations par IP par minute
+  const ip = await obtenirIpVisiteur();
+  if (limiteDebitDepassee(`reservation:${ip}`, 5, 60_000)) {
+    return { succes: false, message: "Trop de tentatives. Merci de réessayer dans une minute." };
+  }
+
   // 1. Extraire les champs du formulaire
   const restaurant_id = formData.get("restaurant_id") as string;
   const nom_client = (formData.get("nom_client") as string)?.trim();

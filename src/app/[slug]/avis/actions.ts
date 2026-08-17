@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { limiteDebitDepassee, obtenirIpVisiteur } from "@/lib/rateLimit";
 
 export type EtatAvis = {
   succes: boolean;
@@ -12,6 +13,12 @@ export async function creerAvis(
   _etatPrecedent: EtatAvis | null,
   formData: FormData
 ): Promise<EtatAvis> {
+  // 0. Frein anti-spam basique : max 5 avis par IP par minute
+  const ip = await obtenirIpVisiteur();
+  if (limiteDebitDepassee(`avis:${ip}`, 5, 60_000)) {
+    return { succes: false, message: "Trop de tentatives. Merci de réessayer dans une minute." };
+  }
+
   // 1. Extraire les champs du formulaire
   const restaurant_id = formData.get("restaurant_id") as string;
   const slug = formData.get("slug") as string;

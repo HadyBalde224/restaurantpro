@@ -167,7 +167,7 @@ export default function FormulaireNouveauRestaurant() {
           Adresse du site
         </label>
         <div className="mt-1 flex items-center rounded-xl border border-gray-300 pl-4 focus-within:border-gray-900 focus-within:ring-1 focus-within:ring-gray-900">
-          <span className="shrink-0 text-sm text-gray-400">restaurantpro.app/</span>
+          <span className="shrink-0 text-sm text-gray-400">nehma.app/</span>
           <input
             id="slug"
             type="text"
