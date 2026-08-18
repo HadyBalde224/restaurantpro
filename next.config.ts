@@ -11,7 +11,9 @@ const nextConfig: NextConfig = {
   // l'IP locale du PC (ex: http://192.168.1.7:3000) fait échouer silencieusement
   // le chargement de plusieurs bundles JS (403) : l'app charge en apparence mais
   // l'hydratation React est cassée par endroits (animations, boutons inertes...).
-  allowedDevOrigins: ["192.168.1.7"],
+  // L'IP vient de DEV_LAN_IP (.env.local, jamais commité) plutôt que d'être en
+  // dur ici : elle est propre à chaque machine de développement.
+  allowedDevOrigins: process.env.DEV_LAN_IP ? [process.env.DEV_LAN_IP] : [],
   images: {
     remotePatterns: [
       {
