@@ -228,3 +228,22 @@ export function IconeAlerte(props: IconeProps) {
     </Svg>
   );
 }
+
+export function IconeTelechargement(props: IconeProps) {
+  return (
+    <Svg {...props}>
+      <path d="M12 3v12M7 10l5 5 5-5" />
+      <path d="M4 19h16" />
+    </Svg>
+  );
+}
+
+export function IconeGalerie(props: IconeProps) {
+  return (
+    <Svg {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="2" />
+      <circle cx="8.5" cy="8.5" r="1.5" />
+      <path d="M21 15l-5-5L5 21" />
+    </Svg>
+  );
+}

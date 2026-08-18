@@ -2,6 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
+import { versCSV } from "@/lib/csv";
+import type { CategorieMenu, Reservation } from "@/lib/types";
 
 export type ResultatAction = {
   succes: boolean;
@@ -35,7 +37,7 @@ async function getContexteAdmin() {
   return { supabase, restaurantId: profil.restaurant_id, slug: restaurant.slug };
 }
 
-function echecSession(): ResultatAction {
+function echecSession(): { succes: false; message: string } {
   return { succes: false, message: "Session expirée. Reconnectez-vous." };
 }
 
@@ -273,4 +275,77 @@ export async function enregistrerLocalisation(donnees: {
 
   revaliderReglages(ctx.slug);
   return { succes: true, message: "Localisation enregistrée." };
+}
+
+// ============================================================================
+// EXPORT DE DONNÉES
+// ============================================================================
+
+export type ResultatExport = { succes: true; contenu: string } | { succes: false; message: string };
+
+export async function exporterMenuCSV(): Promise<ResultatExport> {
+  const ctx = await getContexteAdmin();
+  if (!ctx) return echecSession();
+
+  const { data, error } = await ctx.supabase
+    .from("categories_menu")
+    .select("nom, plats(nom, description, prix, disponible)")
+    .eq("restaurant_id", ctx.restaurantId)
+    .order("ordre")
+    .returns<CategorieMenu[]>();
+
+  if (error) {
+    console.error("Erreur export menu :", error);
+    return { succes: false, message: "Impossible de générer l'export du menu." };
+  }
+
+  const lignes = (data ?? []).flatMap((categorie) =>
+    categorie.plats.map((plat) => [
+      categorie.nom,
+      plat.nom,
+      plat.description,
+      plat.prix,
+      plat.disponible ? "oui" : "non",
+    ])
+  );
+
+  return {
+    succes: true,
+    contenu: versCSV(["Catégorie", "Plat", "Description", "Prix", "Disponible"], lignes),
+  };
+}
+
+export async function exporterReservationsCSV(): Promise<ResultatExport> {
+  const ctx = await getContexteAdmin();
+  if (!ctx) return echecSession();
+
+  const { data, error } = await ctx.supabase
+    .from("reservations")
+    .select("*")
+    .eq("restaurant_id", ctx.restaurantId)
+    .order("date_resa", { ascending: false })
+    .returns<Reservation[]>();
+
+  if (error) {
+    console.error("Erreur export réservations :", error);
+    return { succes: false, message: "Impossible de générer l'export des réservations." };
+  }
+
+  const lignes = (data ?? []).map((r) => [
+    r.nom_client,
+    r.telephone,
+    r.date_resa,
+    r.heure_resa,
+    r.nb_personnes,
+    r.statut,
+    r.message,
+  ]);
+
+  return {
+    succes: true,
+    contenu: versCSV(
+      ["Nom", "Téléphone", "Date", "Heure", "Nombre de personnes", "Statut", "Message"],
+      lignes
+    ),
+  };
 }
