@@ -67,17 +67,17 @@ export default function CarteHoraires({ horaires }: { horaires: Record<string, s
         {JOURS.map(({ id, libelle }) => {
           const ferme = valeurs[id] === "Fermé";
           return (
-            <div key={id} className="flex flex-wrap items-center gap-3">
-              <span className="w-24 shrink-0 text-sm font-medium text-gray-700">{libelle}</span>
+            <div key={id} className="flex flex-wrap items-center justify-between gap-3">
+              <span className="order-1 w-24 shrink-0 text-sm font-medium text-gray-700">{libelle}</span>
               <input
                 type="text"
                 value={ferme ? "Fermé" : valeurs[id]}
                 onChange={(e) => modifierJour(id, e.target.value)}
                 disabled={ferme}
                 placeholder="Ex. 11h30 – 23h00"
-                className="min-w-0 flex-1 rounded-xl border border-gray-300 px-4 py-2 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-400"
+                className="order-3 w-full min-w-0 rounded-xl border border-gray-300 px-4 py-2 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900 disabled:bg-gray-50 disabled:text-gray-400 sm:order-2 sm:w-auto sm:flex-1"
               />
-              <div className="flex shrink-0 items-center gap-2 text-sm text-gray-600">
+              <div className="order-2 flex shrink-0 items-center gap-2 text-sm text-gray-600 sm:order-3">
                 <button
                   type="button"
                   onClick={() => basculerFerme(id)}

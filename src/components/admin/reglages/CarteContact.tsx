@@ -41,7 +41,7 @@ export default function CarteContact({ restaurant }: { restaurant: Restaurant })
               inputMode="tel"
               value={telephone}
               onChange={(e) => setTelephone(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+              className="mt-1 w-full min-w-0 truncate rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
             />
           </div>
           <div>
@@ -55,7 +55,7 @@ export default function CarteContact({ restaurant }: { restaurant: Restaurant })
               required
               value={whatsapp}
               onChange={(e) => setWhatsapp(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+              className="mt-1 w-full min-w-0 truncate rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
             />
             <p className="mt-1 text-xs text-gray-400">Format international sans +, ex : 224620000000</p>
           </div>
@@ -84,7 +84,7 @@ export default function CarteContact({ restaurant }: { restaurant: Restaurant })
               type="text"
               value={adresse}
               onChange={(e) => setAdresse(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+              className="mt-1 w-full min-w-0 truncate rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
             />
           </div>
           <div>
@@ -96,7 +96,7 @@ export default function CarteContact({ restaurant }: { restaurant: Restaurant })
               type="text"
               value={ville}
               onChange={(e) => setVille(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
+              className="mt-1 w-full min-w-0 truncate rounded-xl border border-gray-300 px-4 py-2.5 outline-none transition focus:border-gray-900 focus:ring-1 focus:ring-gray-900"
             />
           </div>
         </div>
