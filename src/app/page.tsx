@@ -236,7 +236,16 @@ export default async function PageAccueil() {
           </a>
         </div>
 
-        <p className="mt-8 text-xs text-white/30">
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-white/40">
+          <Link href="/mentions-legales" className="flex min-h-11 items-center transition-colors duration-200 hover:text-white/70">
+            Mentions légales
+          </Link>
+          <Link href="/confidentialite" className="flex min-h-11 items-center transition-colors duration-200 hover:text-white/70">
+            Confidentialité
+          </Link>
+        </div>
+
+        <p className="mt-4 text-xs text-white/30">
           © {new Date().getFullYear()} NEHMA. Tous droits réservés.
         </p>
         <Link

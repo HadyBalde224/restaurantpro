@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Restaurant } from "@/lib/types";
 import Apparition from "@/components/Apparition";
 
@@ -38,8 +39,17 @@ export default function Footer({ restaurant }: { restaurant: Restaurant }) {
             )}
           </div>
         )}
-        <p className="mt-6 text-xs text-white/40">
-          © {new Date().getFullYear()} {restaurant.nom}
+        <div className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-xs text-white/50">
+          <Link href="/mentions-legales" className="flex min-h-11 items-center transition-colors duration-200 hover:text-white">
+            Mentions légales
+          </Link>
+          <Link href="/confidentialite" className="flex min-h-11 items-center transition-colors duration-200 hover:text-white">
+            Confidentialité
+          </Link>
+        </div>
+
+        <p className="mt-2 text-xs text-white/40">
+          © {new Date().getFullYear()} {restaurant.nom} · propulsé par NEHMA
         </p>
       </Apparition>
     </footer>
