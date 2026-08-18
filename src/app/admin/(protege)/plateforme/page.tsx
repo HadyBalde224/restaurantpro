@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import type { Abonnement } from "@/lib/types";
 import { IconeBoutique, IconeCalendrier, IconeArgent, IconeAlerte, IconePlus, IconeFlecheDroite } from "@/components/admin/Icones";
 import BadgeStatut from "@/components/admin/BadgeStatut";
+import { statutAbonnement, JOURS_GRACE } from "@/lib/abonnement";
 
 type RestaurantListe = {
   id: string;
@@ -57,15 +58,15 @@ export default async function PageTableauDeBordPlateforme() {
   const nbActifs = listeRestaurants.filter((r) => r.actif).length;
   const nbSuspendus = listeRestaurants.length - nbActifs;
 
-  const aujourdhui = new Date();
-  const estExpire = (abonnement: Abonnement | undefined) =>
-    !abonnement?.paye_jusqu_au || new Date(abonnement.paye_jusqu_au) < aujourdhui;
-
   const revenuMensuel = listeRestaurants
     .filter((r) => r.actif)
     .reduce((somme, r) => somme + (abonnementParRestaurant.get(r.id)?.prix_mensuel ?? 0), 0);
 
-  const nbExpires = listeRestaurants.filter((r) => estExpire(abonnementParRestaurant.get(r.id))).length;
+  // "Expiré" ici = hors délai de grâce (JOURS_GRACE écoulés) : un simple
+  // retard récent (encore dans la grâce) ne compte pas comme un cas urgent.
+  const nbExpires = listeRestaurants.filter(
+    (r) => statutAbonnement(abonnementParRestaurant.get(r.id)?.paye_jusqu_au ?? null).etat === "expire"
+  ).length;
 
   const cartes = [
     {
@@ -93,11 +94,11 @@ export default async function PageTableauDeBordPlateforme() {
       Icone: IconeArgent,
     },
     {
-      libelle: "Abonnements expirés",
+      libelle: "À suspendre",
       valeur: nbExpires,
-      sousTexte: "Non payés ou échus",
-      couleur: "text-orange-600",
-      fond: "bg-orange-50",
+      sousTexte: `Hors délai de grâce (${JOURS_GRACE} j)`,
+      couleur: "text-red-600",
+      fond: "bg-red-50",
       Icone: IconeAlerte,
     },
   ];
@@ -143,6 +144,7 @@ export default async function PageTableauDeBordPlateforme() {
           <ul className="divide-y divide-black/5">
             {listeRestaurants.map((restaurant) => {
               const abonnement = abonnementParRestaurant.get(restaurant.id);
+              const statut = statutAbonnement(abonnement?.paye_jusqu_au ?? null);
               return (
                 <li key={restaurant.id}>
                   <Link
@@ -153,10 +155,13 @@ export default async function PageTableauDeBordPlateforme() {
                       <p className="font-semibold text-gray-900">{restaurant.nom}</p>
                       <p className="text-sm text-gray-500">{restaurant.ville}</p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-wrap items-center gap-3">
                       <BadgeStatut statut={restaurant.actif ? "actif" : "suspendu"} />
+                      <BadgeStatut statut={statut.etat} />
                       <span className="text-sm text-gray-500">
-                        Payé jusqu&apos;au {formaterDate(abonnement?.paye_jusqu_au ?? null)}
+                        {statut.etat === "en_grace"
+                          ? `Payé jusqu'au ${formaterDate(abonnement?.paye_jusqu_au ?? null)} · ${statut.joursAvantCoupure} j avant suspension conseillée`
+                          : `Payé jusqu'au ${formaterDate(abonnement?.paye_jusqu_au ?? null)}`}
                       </span>
                       <IconeFlecheDroite size={16} className="text-gray-300" />
                     </div>

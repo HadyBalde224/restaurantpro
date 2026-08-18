@@ -6,7 +6,11 @@ export type StatutBadge =
   | "a_moderer"
   | "publie"
   | "actif"
-  | "suspendu";
+  | "suspendu"
+  | "paye"
+  | "sans_information"
+  | "en_grace"
+  | "expire";
 
 const STYLES: Record<StatutBadge, { texte: string; classe: string }> = {
   en_attente: { texte: "En attente", classe: "bg-orange-50 text-orange-700" },
@@ -17,6 +21,10 @@ const STYLES: Record<StatutBadge, { texte: string; classe: string }> = {
   publie: { texte: "Publié", classe: "bg-green-50 text-green-700" },
   actif: { texte: "Actif", classe: "bg-green-50 text-green-700" },
   suspendu: { texte: "Suspendu", classe: "bg-red-50 text-red-700" },
+  paye: { texte: "À jour", classe: "bg-green-50 text-green-700" },
+  sans_information: { texte: "Sans information", classe: "bg-gray-100 text-gray-500" },
+  en_grace: { texte: "En retard", classe: "bg-orange-50 text-orange-700" },
+  expire: { texte: "À suspendre", classe: "bg-red-50 text-red-700" },
 };
 
 export default function BadgeStatut({ statut }: { statut: StatutBadge }) {

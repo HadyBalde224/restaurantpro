@@ -1,11 +1,9 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export default function PageLogin() {
-  const router = useRouter();
   const supabase = createClient();
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
@@ -29,8 +27,10 @@ export default function PageLogin() {
       return;
     }
 
-    router.push("/admin");
-    router.refresh();
+    // Rechargement complet (pas router.push+refresh) : un super-admin doit
+    // passer par la redirection serveur vers /admin/plateforme dès la
+    // connexion, ce qu'une transition client ne déclenche pas de façon fiable.
+    window.location.href = "/admin";
   };
 
   return (

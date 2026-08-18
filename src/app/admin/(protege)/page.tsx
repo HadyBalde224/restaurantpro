@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Avis, Reservation } from "@/lib/types";
 import { IconeCalendrier, IconeEtoile, IconeMenu } from "@/components/admin/Icones";
 import BadgeStatut from "@/components/admin/BadgeStatut";
+import { statutAbonnement } from "@/lib/abonnement";
 
 function formaterDateHeureResa(dateResa: string, heureResa: string) {
   const date = new Date(dateResa).toLocaleDateString("fr-FR", { day: "numeric", month: "short" });
@@ -22,11 +23,17 @@ export default async function TableauDeBordAdmin() {
 
   const { data: profil } = await supabase
     .from("profils_admin")
-    .select("restaurant_id")
+    .select("restaurant_id, role")
     .eq("id", user.id)
     .single();
 
   if (!profil) redirect("/admin/login");
+
+  // Un super-admin n'a pas de restaurant_id : sans cette redirection, il
+  // atterrissait après connexion sur ce tableau de bord restaurateur, qui se
+  // rendait "vide" (toutes les requêtes filtrées sur restaurant_id=null ne
+  // renvoient jamais rien) au lieu du vrai tableau de bord plateforme.
+  if (profil.role === "super_admin") redirect("/admin/plateforme");
 
   const aujourdhui = new Date();
   const dansSeptJours = new Date();
@@ -80,6 +87,17 @@ export default async function TableauDeBordAdmin() {
       .returns<Avis[]>(),
     supabase.from("restaurants").select("nom").eq("id", profil.restaurant_id).single(),
   ]);
+
+  // Lecture de son propre abonnement pour la bannière de retard de paiement.
+  // Nécessite une policy RLS autorisant un admin à lire SA ligne abonnements
+  // (absente par défaut) — sans elle, la requête renvoie juste aucune ligne
+  // et la bannière ne s'affiche jamais (dégradation silencieuse, pas de crash).
+  const { data: abonnement } = await supabase
+    .from("abonnements")
+    .select("paye_jusqu_au")
+    .eq("restaurant_id", profil.restaurant_id)
+    .maybeSingle();
+  const statutPaiement = statutAbonnement(abonnement?.paye_jusqu_au ?? null);
 
   if (erreurReservations) console.error("Erreur comptage réservations :", erreurReservations);
   if (erreurAvis) console.error("Erreur comptage avis :", erreurAvis);
@@ -140,6 +158,20 @@ export default async function TableauDeBordAdmin() {
       </h1>
       <p className="mt-1 text-gray-500">Voici un aperçu de l&apos;activité de votre restaurant aujourd&apos;hui.</p>
       <p className="mt-0.5 text-sm capitalize text-gray-400">{dateFormatee}</p>
+
+      {(statutPaiement.etat === "en_grace" || statutPaiement.etat === "expire") && (
+        <div
+          className={`mt-6 rounded-2xl border px-5 py-4 text-sm font-medium ${
+            statutPaiement.etat === "en_grace"
+              ? "border-orange-200 bg-orange-50 text-orange-800"
+              : "border-red-200 bg-red-50 text-red-800"
+          }`}
+        >
+          {statutPaiement.etat === "en_grace"
+            ? `Votre abonnement est en retard de paiement depuis ${statutPaiement.joursDepuisExpiration} jour(s). Régularisez sous ${statutPaiement.joursAvantCoupure} jour(s) pour éviter une suspension de votre site.`
+            : "Votre abonnement est en retard de paiement au-delà du délai de grâce. Contactez-nous rapidement pour éviter la suspension de votre site."}
+        </div>
+      )}
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {cartes.map((carte) => (

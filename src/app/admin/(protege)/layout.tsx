@@ -38,9 +38,14 @@ export default async function LayoutAdmin({
 
   const nomAffiche = estSuperAdmin ? "NEHMA" : (restaurant?.nom ?? "");
 
+  // Le super-admin n'a pas de restaurant, donc pas de couleur_primaire/accent :
+  // deux couleurs par défaut DISTINCTES sont nécessaires, sinon le fond et le
+  // texte des boutons (ex. "Nouveau restaurant") deviennent identiques et le
+  // bouton paraît vide (même bug que celui déjà corrigé pour la création
+  // d'un nouveau restaurant, voir creerRestaurant dans plateforme/actions.ts).
   const variablesTheme = {
     "--primaire": restaurant?.couleur_primaire ?? "#171717",
-    "--accent": restaurant?.couleur_accent ?? "#171717",
+    "--accent": restaurant?.couleur_accent ?? "#c9a86a",
   } as CSSProperties;
 
   return (
