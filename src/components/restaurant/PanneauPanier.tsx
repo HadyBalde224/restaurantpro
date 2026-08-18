@@ -92,7 +92,7 @@ export default function PanneauPanier({
           <div className="border-t border-black/5 px-6 py-4">
             <div className="mb-4 flex items-center justify-between font-semibold">
               <span>Total</span>
-              <span style={{ color: "var(--accent)" }}>
+              <span style={{ color: "var(--primaire)" }}>
                 {total} {restaurant.devise}
               </span>
             </div>

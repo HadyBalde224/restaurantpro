@@ -45,7 +45,12 @@ export default async function LayoutAdmin({
 
   return (
     <div className="zone-admin min-h-screen bg-gray-50" style={variablesTheme}>
-      <Sidebar nom={nomAffiche} nomComplet={profil.nom_complet ?? ""} role={profil.role ?? "admin"} />
+      <Sidebar
+        nom={nomAffiche}
+        nomComplet={profil.nom_complet ?? ""}
+        role={profil.role ?? "admin"}
+        logoUrl={restaurant?.logo_url}
+      />
       <div className="lg:pl-60">
         <EnteteContenu nom={nomAffiche} />
         <main className="mx-auto max-w-6xl p-6">{children}</main>

@@ -27,28 +27,47 @@ export default function Apparition({
     const element = ref.current;
     if (!element) return;
 
-    const rect = element.getBoundingClientRect();
-    const hauteurViewport = window.innerHeight || document.documentElement.clientHeight;
-    const dejaVisible = rect.top < hauteurViewport && rect.bottom > 0;
-    if (dejaVisible) return;
+    const estDansViewport = () => {
+      const rect = element.getBoundingClientRect();
+      const hauteurViewport = window.innerHeight || document.documentElement.clientHeight;
+      return rect.top < hauteurViewport && rect.bottom > 0;
+    };
+
+    if (estDansViewport()) return;
 
     setMasque(true);
 
-    // threshold: 0 plutôt qu'un pourcentage — une section plus haute que le
-    // viewport (fréquent sur mobile) peut ne jamais atteindre un seuil comme
-    // 0.15 : elle resterait alors masquée même en plein milieu de l'écran.
-    const observateur = new IntersectionObserver(
-      ([entree]) => {
-        if (entree.isIntersecting) {
-          setMasque(false);
-          observateur.disconnect();
-        }
-      },
-      { threshold: 0 }
-    );
+    // Vérification directe au scroll/resize (getBoundingClientRect) plutôt
+    // qu'IntersectionObserver : ce dernier s'est montré peu fiable sur
+    // Safari/iOS réel (callback qui ne se déclenche pas de façon cohérente
+    // pour certains éléments), là où getBoundingClientRect a été vérifié
+    // fiable dans toutes les conditions testées.
+    let actif = true;
+    let enAttente = false;
 
-    observateur.observe(element);
-    return () => observateur.disconnect();
+    const verifier = () => {
+      if (enAttente) return;
+      enAttente = true;
+      requestAnimationFrame(() => {
+        enAttente = false;
+        if (!actif) return;
+        if (estDansViewport()) {
+          setMasque(false);
+          actif = false;
+          window.removeEventListener("scroll", verifier);
+          window.removeEventListener("resize", verifier);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", verifier, { passive: true });
+    window.addEventListener("resize", verifier);
+
+    return () => {
+      actif = false;
+      window.removeEventListener("scroll", verifier);
+      window.removeEventListener("resize", verifier);
+    };
   }, []);
 
   return (

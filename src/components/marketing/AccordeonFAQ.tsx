@@ -19,6 +19,10 @@ const QUESTIONS = [
     question: "Que se passe-t-il si je ne renouvelle pas ?",
     reponse: "Votre site est mis en pause et devient invisible pour vos clients, mais rien n'est supprimé : menu, avis et réservations sont conservés et réapparaissent dès le renouvellement.",
   },
+  {
+    question: "Et si je ne sais pas utiliser un ordinateur ?",
+    reponse: "Aucun souci. Tout se gère depuis votre téléphone, aussi simplement qu'un statut WhatsApp.",
+  },
 ];
 
 function IconeChevron({ ouvert }: { ouvert: boolean }) {

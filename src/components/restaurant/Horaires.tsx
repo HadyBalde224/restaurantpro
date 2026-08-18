@@ -138,7 +138,7 @@ export default function Horaires({ horaires }: { horaires: Record<string, string
   }
 
   return (
-    <section id="horaires" className="mx-auto w-full max-w-6xl scroll-mt-24 px-6 py-24 sm:px-8 md:py-32">
+    <section id="horaires" className="mx-auto w-full max-w-6xl scroll-mt-32 px-6 py-24 sm:px-8 md:py-32">
       <Apparition>
         <TitreSection>Horaires</TitreSection>
 
@@ -206,26 +206,19 @@ export default function Horaires({ horaires }: { horaires: Record<string, string
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <span
-                      className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                        jourOuvert ? "bg-green-50 text-green-700" : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 rounded-full ${jourOuvert ? "bg-green-500" : "bg-gray-400"}`}
-                        aria-hidden="true"
-                      />
-                      {jourOuvert ? "Ouvert" : "Fermé"}
-                    </span>
-                    <span
-                      className="flex items-center gap-1.5 text-sm"
-                      style={estAujourdhui ? { color: "var(--accent)", fontWeight: 600 } : { color: "#6b7280" }}
-                    >
-                      <IconeHorloge className="h-3.5 w-3.5" />
-                      {horaires[jour] ?? "Fermé"}
-                    </span>
-                  </div>
+                  <span
+                    className="flex items-center gap-1.5 text-sm"
+                    style={
+                      !jourOuvert
+                        ? { color: "#9ca3af" }
+                        : estAujourdhui
+                        ? { color: "var(--primaire)", fontWeight: 600 }
+                        : { color: "#6b7280" }
+                    }
+                  >
+                    <IconeHorloge className="h-3.5 w-3.5" />
+                    {horaires[jour] ?? "Fermé"}
+                  </span>
                 </li>
               );
             })}

@@ -3,6 +3,7 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { enregistrerApparence } from "@/app/admin/(protege)/reglages/actions";
+import { idUnique } from "@/lib/id";
 import BarreActions from "@/components/admin/reglages/BarreActions";
 import EnteteCarte from "@/components/admin/reglages/EnteteCarte";
 import { IconePalette } from "@/components/admin/Icones";
@@ -11,6 +12,22 @@ import type { Restaurant } from "@/lib/types";
 const TAILLE_MAX_LOGO = 2 * 1024 * 1024; // 2 Mo
 const TAILLE_MAX_HERO = 4 * 1024 * 1024; // 4 Mo
 const MAX_PHOTOS_HERO = 3;
+
+// Traduit les erreurs de Supabase Storage en messages exploitables — le
+// message générique précédent ("Impossible d'envoyer une image") ne disait
+// pas à l'utilisateur QUOI corriger. Le cas le plus fréquent : les photos
+// iPhone au format HEIC/HEIF, que le bucket refuse (seuls JPG/PNG/WEBP/GIF
+// sont autorisés côté serveur).
+function messageErreurUpload(err: unknown): string {
+  const code = (err as { code?: string } | null)?.code;
+  if (code === "InvalidMimeType") {
+    return "Format d'image non supporté (HEIC/HEIF non accepté) — utilisez JPG, PNG ou WEBP.";
+  }
+  if (code === "EntityTooLarge") {
+    return "Cette image dépasse la taille maximale autorisée (4 Mo).";
+  }
+  return "Impossible d'envoyer une image. Réessayez.";
+}
 
 function cheminDepuisUrlPublique(url: string): string | null {
   const marqueur = "/object/public/images/";
@@ -40,7 +57,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
 
   const [photos, setPhotos] = useState<PhotoHero[]>(() =>
     (restaurant.photos_hero ?? []).map((url) => ({
-      id: crypto.randomUUID(),
+      id: idUnique(),
       urlActuelle: url,
       fichier: null,
       apercu: url,
@@ -86,7 +103,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
     const apercuLocal = URL.createObjectURL(f);
 
     if (cible === "nouvelle") {
-      setPhotos((p) => [...p, { id: crypto.randomUUID(), urlActuelle: null, fichier: f, apercu: apercuLocal }]);
+      setPhotos((p) => [...p, { id: idUnique(), urlActuelle: null, fichier: f, apercu: apercuLocal }]);
     } else {
       setPhotos((p) => p.map((photo) => (photo.id === cible ? { ...photo, fichier: f, apercu: apercuLocal } : photo)));
     }
@@ -116,7 +133,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
 
   const televerser = async (fichier: File, ancienneUrl: string | null): Promise<string> => {
     const extension = fichier.name.split(".").pop() || "jpg";
-    const chemin = `${restaurant.id}/identite/${crypto.randomUUID()}.${extension}`;
+    const chemin = `${restaurant.id}/identite/${idUnique()}.${extension}`;
 
     const { error } = await supabase.storage.from("images").upload(chemin, fichier);
     if (error) throw error;
@@ -133,7 +150,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
 
   const televerserPhotoHero = async (fichier: File, position: number): Promise<string> => {
     const extension = fichier.name.split(".").pop() || "jpg";
-    const chemin = `${restaurant.id}/identite/hero-${position + 1}-${crypto.randomUUID()}.${extension}`;
+    const chemin = `${restaurant.id}/identite/hero-${position + 1}-${idUnique()}.${extension}`;
 
     const { error } = await supabase.storage.from("images").upload(chemin, fichier);
     if (error) throw error;
@@ -167,7 +184,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
     } catch (err) {
       console.error("Erreur upload image identité :", err);
       setEnCours(false);
-      setMessage({ texte: "Impossible d'envoyer une image. Réessayez.", erreur: true });
+      setMessage({ texte: messageErreurUpload(err), erreur: true });
       return;
     }
 
@@ -195,7 +212,7 @@ export default function CarteApparence({ restaurant }: { restaurant: Restaurant 
     setLogoUrl(nouveauLogoUrl);
     setFichierLogo(null);
     setPhotos(
-      nouvellesPhotosHero.map((url) => ({ id: crypto.randomUUID(), urlActuelle: url, fichier: null, apercu: url })),
+      nouvellesPhotosHero.map((url) => ({ id: idUnique(), urlActuelle: url, fichier: null, apercu: url })),
     );
     setPhotosASupprimer([]);
     setMessage({ texte: "✓ Enregistré", erreur: false });

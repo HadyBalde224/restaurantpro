@@ -26,7 +26,10 @@ export default function FicheRestaurant({
   const [enregistrementEnCours, setEnregistrementEnCours] = useState(false);
   const [messageAbonnement, setMessageAbonnement] = useState<{ texte: string; erreur: boolean } | null>(null);
 
-  const urlSite = `${typeof window !== "undefined" ? window.location.origin : ""}/${restaurant.slug}`;
+  // Lien relatif : le site public est sur le même domaine que l'admin, pas
+  // besoin de window.location.origin (qui différerait entre le rendu serveur
+  // et l'hydratation client — source classique de mismatch d'hydratation).
+  const urlSite = `/${restaurant.slug}`;
 
   const confirmerChangementStatut = async () => {
     setChangementEnCours(true);

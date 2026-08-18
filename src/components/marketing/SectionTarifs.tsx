@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type Pays = "guinee" | "maroc";
+export type Pays = "guinee" | "maroc";
 
 const DONNEES: Record<
   Pays,
@@ -10,40 +10,47 @@ const DONNEES: Record<
     libelle: string;
     whatsapp: string;
     installation: string;
-    standard: string;
-    pro: string;
+    abonnement: string;
   }
 > = {
   guinee: {
     libelle: "Guinée",
-    whatsapp: "224622014608",
-    installation: "500 000 – 800 000 GNF (selon la taille du restaurant)",
-    standard: "100 000 GNF/mois",
-    pro: "200 000 GNF/mois",
+    whatsapp: "224622014609",
+    installation: "500 000 – 800 000 GNF",
+    abonnement: "100 000 GNF/mois",
   },
   maroc: {
     libelle: "Maroc",
     whatsapp: "212693269381",
-    installation: "1 500 MAD",
-    standard: "200 MAD/mois",
-    pro: "350 MAD/mois",
+    installation: "500 – 800 MAD",
+    abonnement: "100 MAD/mois",
   },
 };
 
-export default function SectionTarifs() {
-  const [pays, setPays] = useState<Pays>("guinee");
+export default function SectionTarifs({
+  pays: paysControle,
+  onChangePays,
+}: {
+  // Contrôlable depuis un parent (pour partager l'état avec la section Démo) ;
+  // sans ces props, le composant gère son propre état comme avant.
+  pays?: Pays;
+  onChangePays?: (pays: Pays) => void;
+} = {}) {
+  const [paysInterne, setPaysInterne] = useState<Pays>("guinee");
+  const pays = paysControle ?? paysInterne;
+  const changerPays = onChangePays ?? setPaysInterne;
   const donnees = DONNEES[pays];
   const messagePreecrit = encodeURIComponent("Bonjour, je souhaite un site pour mon restaurant");
   const lienWhatsApp = `https://wa.me/${donnees.whatsapp}?text=${messagePreecrit}`;
 
   return (
-    <div className="mx-auto max-w-3xl">
+    <div className="mx-auto max-w-md">
       <div className="mx-auto flex w-fit gap-1 rounded-full border border-white/10 bg-(--surface) p-1">
         {(Object.keys(DONNEES) as Pays[]).map((cle) => (
           <button
             key={cle}
             type="button"
-            onClick={() => setPays(cle)}
+            onClick={() => changerPays(cle)}
             className="min-h-11 rounded-full px-6 text-sm font-semibold transition-colors duration-200"
             style={
               pays === cle
@@ -60,36 +67,20 @@ export default function SectionTarifs() {
         Installation : <span className="font-semibold text-white/85">{donnees.installation}</span>
       </p>
 
-      <div className="mt-8 grid gap-6 sm:grid-cols-2">
-        <div className="rounded-2xl border border-white/10 bg-(--surface) p-6 sm:p-8">
-          <h3 className="text-lg font-bold text-white">Standard</h3>
-          <p className="mt-2 text-3xl font-bold text-white">{donnees.standard}</p>
-          <ul className="mt-5 space-y-2.5 text-sm text-white/70">
-            <li>Site professionnel complet</li>
-            <li>Menu numérique modifiable</li>
-            <li>Commandes WhatsApp</li>
-            <li>Réservations de table</li>
-          </ul>
-        </div>
-
-        <div
-          className="relative rounded-2xl border p-6 sm:p-8"
-          style={{ borderColor: "var(--or)", background: "color-mix(in srgb, var(--or) 8%, var(--surface))" }}
-        >
-          <span
-            className="absolute -top-3 right-6 rounded-full px-3 py-1 text-xs font-bold"
-            style={{ background: "var(--or)", color: "var(--fond)" }}
-          >
-            Recommandé
-          </span>
-          <h3 className="text-lg font-bold text-white">Pro</h3>
-          <p className="mt-2 text-3xl font-bold text-white">{donnees.pro}</p>
-          <ul className="mt-5 space-y-2.5 text-sm text-white/70">
-            <li>Tout le plan Standard</li>
-            <li>Réservations illimitées</li>
-            <li>Support prioritaire</li>
-          </ul>
-        </div>
+      <div
+        className="relative mt-8 rounded-2xl border p-8"
+        style={{ borderColor: "var(--or)", background: "color-mix(in srgb, var(--or) 8%, var(--surface))" }}
+      >
+        <p className="font-bold text-white" style={{ fontSize: "clamp(1.375rem, 6vw, 1.875rem)" }}>
+          {donnees.abonnement}
+        </p>
+        <ul className="mt-5 space-y-2.5 text-sm text-white/70">
+          <li>Site professionnel personnalisé</li>
+          <li>Menu numérique modifiable</li>
+          <li>Réservations de table</li>
+          <li>Commandes WhatsApp illimitées</li>
+          <li>Support inclus</li>
+        </ul>
       </div>
 
       <p className="mt-6 text-center text-sm text-white/50">

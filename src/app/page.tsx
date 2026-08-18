@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { getRestaurant } from "@/lib/restaurant";
 import Apparition from "@/components/Apparition";
 import AccordeonFAQ from "@/components/marketing/AccordeonFAQ";
-import SectionTarifs from "@/components/marketing/SectionTarifs";
+import SectionDemoTarifs from "@/components/marketing/SectionDemoTarifs";
 
 export const metadata: Metadata = {
   title: "NEHMA — Créez le site de votre restaurant",
@@ -12,23 +11,23 @@ export const metadata: Metadata = {
     "NEHMA crée des sites professionnels pour restaurants en Guinée et au Maroc : menu numérique, réservations, commandes WhatsApp, sans commission sur vos ventes.",
 };
 
-const WHATSAPP_GUINEE = "224622014608";
+const WHATSAPP_GUINEE = "224622014609";
 const WHATSAPP_MAROC = "212693269381";
 const MESSAGE_CONTACT = encodeURIComponent(
   "Bonjour, je voudrais en savoir plus sur NEHMA pour mon restaurant."
 );
 
-function IconeWhatsApp({ className }: { className?: string }) {
+function IconeWhatsApp({ className, size = 20 }: { className?: string; size?: number }) {
   return (
-    <svg viewBox="0 0 32 32" width="20" height="20" fill="currentColor" className={className} aria-hidden="true">
+    <svg viewBox="0 0 32 32" width={size} height={size} fill="currentColor" className={className} aria-hidden="true">
       <path d="M16.001 3C9.373 3 4 8.373 4 15c0 2.343.652 4.53 1.785 6.4L4 29l7.79-1.75A11.94 11.94 0 0 0 16 27c6.627 0 12-5.373 12-12S22.627 3 16.001 3zm0 21.7c-1.96 0-3.79-.55-5.35-1.5l-.383-.23-4.62 1.04 1.02-4.5-.25-.39A9.68 9.68 0 0 1 6.3 15c0-5.35 4.35-9.7 9.7-9.7s9.7 4.35 9.7 9.7-4.349 9.7-9.699 9.7zm5.34-7.27c-.29-.145-1.72-.85-1.99-.945-.267-.098-.462-.145-.656.145-.194.29-.75.945-.92 1.14-.17.194-.34.218-.63.073-.29-.145-1.224-.451-2.332-1.437-.862-.768-1.444-1.717-1.613-2.007-.169-.29-.018-.446.127-.59.13-.13.29-.34.435-.51.145-.17.194-.29.29-.484.097-.194.048-.363-.024-.508-.073-.145-.656-1.58-.9-2.164-.237-.57-.478-.492-.656-.5l-.559-.01c-.194 0-.508.073-.774.363-.267.29-1.02.996-1.02 2.43s1.044 2.82 1.19 3.014c.145.194 2.055 3.14 4.98 4.404.696.3 1.238.48 1.66.615.697.222 1.332.19 1.833.115.559-.083 1.72-.703 1.962-1.382.243-.678.243-1.26.17-1.382-.073-.121-.267-.194-.556-.34z" />
     </svg>
   );
 }
 
-function IconePersonnalisation({ className }: { className?: string }) {
+function IconePersonnalisation({ className, size = 26 }: { className?: string; size?: number }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
       <path d="M12 3a9 9 0 1 0 0 18c1.1 0 2-.9 2-2 0-.5-.2-1-.6-1.4-.4-.4-.6-.9-.6-1.4 0-1.1.9-2 2-2h1.6c1.9 0 3.6-1.7 3.6-3.6C20 6.7 16.4 3 12 3Z" />
       <circle cx="7.5" cy="11.5" r="1.1" fill="currentColor" stroke="none" />
       <circle cx="10.5" cy="7.5" r="1.1" fill="currentColor" stroke="none" />
@@ -37,9 +36,9 @@ function IconePersonnalisation({ className }: { className?: string }) {
   );
 }
 
-function IconeZeroCommission({ className }: { className?: string }) {
+function IconeZeroCommission({ className, size = 26 }: { className?: string; size?: number }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
       <circle cx="12" cy="12" r="9" />
       <path d="M8.5 8.5l7 7" />
       <circle cx="9" cy="9" r="0.5" fill="currentColor" />
@@ -48,9 +47,9 @@ function IconeZeroCommission({ className }: { className?: string }) {
   );
 }
 
-function IconePret({ className }: { className?: string }) {
+function IconePret({ className, size = 26 }: { className?: string; size?: number }) {
   return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
       <rect x="3" y="4" width="18" height="17" rx="2" />
       <path d="M16 2v4M8 2v4M3 9h18" />
       <path d="M9 14l2 2 4-4" />
@@ -61,34 +60,49 @@ function IconePret({ className }: { className?: string }) {
 const BENEFICES = [
   {
     Icone: IconePersonnalisation,
-    titre: "Votre site, à votre image",
-    texte: "Logo, couleurs et menu modifiables par vous-même, sans toucher au code.",
+    titre: "Votre restaurant, pas un autre",
+    texte: "Logo, couleurs, menu : tout est à vous. Modifiable en un instant, depuis votre téléphone.",
   },
   {
     Icone: IconeZeroCommission,
-    titre: "Zéro commission",
-    texte: "Contrairement à Glovo et consorts, vous gardez 100% de vos ventes.",
+    titre: "Vous gardez chaque franc que vous gagnez",
+    texte: "Contrairement à Glovo et aux autres plateformes, aucune commission n'est prélevée sur vos ventes.",
   },
   {
     Icone: IconeWhatsApp,
-    titre: "Commandes et réservations sur WhatsApp",
-    texte: "Vos clients commandent, vous recevez tout directement.",
+    titre: "Vos clients commandent là où ils sont déjà",
+    texte: "Pas d'application à télécharger. Vos clients réservent et commandent directement sur WhatsApp.",
   },
   {
     Icone: IconePret,
-    titre: "Prêt en quelques jours",
-    texte: "On s'occupe de tout : menu, photos, mise en ligne.",
+    titre: "On s'occupe de tout",
+    texte: "Envoyez-nous votre menu et vos photos. On configure votre site — vous n'avez rien à faire.",
   },
 ];
 
 export default async function PageAccueil() {
-  const weltare = await getRestaurant("weltare");
-  const photoApercu = weltare?.photos_hero?.[0] ?? null;
+  const [weltare, darZayna] = await Promise.all([
+    getRestaurant("weltare"),
+    getRestaurant("dar-zayna"),
+  ]);
+
+  const demos = {
+    guinee: {
+      nom: weltare?.nom ?? "Weltare",
+      slug: "weltare",
+      photoUrl: weltare?.photos_hero?.[0] ?? null,
+    },
+    maroc: {
+      nom: darZayna?.nom ?? "Dar Zayna",
+      slug: "dar-zayna",
+      photoUrl: darZayna?.photos_hero?.[0] ?? null,
+    },
+  };
 
   return (
     <div className="zone-marketing min-h-screen bg-(--fond)">
       {/* HERO */}
-      <section className="relative overflow-hidden px-6 pt-20 pb-20 text-center sm:px-8 sm:pt-28 sm:pb-28">
+      <section className="relative overflow-hidden px-6 pt-[max(5rem,calc(env(safe-area-inset-top)+3rem))] pb-20 text-center sm:px-8 sm:pt-28 sm:pb-28">
         <div
           className="pointer-events-none absolute inset-x-0 top-0 h-[560px]"
           style={{ background: "radial-gradient(ellipse at top, color-mix(in srgb, var(--or) 14%, transparent) 0%, transparent 70%)" }}
@@ -105,20 +119,20 @@ export default async function PageAccueil() {
               className="mx-auto mt-6 max-w-3xl font-bold leading-[1.1] text-white"
               style={{ fontSize: "clamp(2.25rem, 6vw, 4rem)" }}
             >
-              Votre restaurant mérite un vrai site web
+              Votre restaurant mérite mieux qu&apos;une page Facebook.
             </h1>
           </Apparition>
 
           <Apparition delai={200}>
             <p className="mx-auto mt-6 max-w-xl text-lg text-white/75">
-              NEHMA crée votre site professionnel : menu numérique, réservations et
-              commandes WhatsApp, sans commission sur vos ventes.
+              NEHMA vous donne un vrai site professionnel — votre menu, vos réservations,
+              vos commandes — sans jamais payer de commission sur vos ventes.
             </p>
           </Apparition>
 
           <Apparition delai={300}>
             <div className="mt-10 flex flex-col items-center gap-4">
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
                 <a
                   href="/weltare"
                   target="_blank"
@@ -152,18 +166,18 @@ export default async function PageAccueil() {
       </section>
 
       {/* BÉNÉFICES */}
-      <section className="px-6 py-20 sm:px-8">
+      <section className="px-6 py-24 sm:px-8 md:py-32">
         <div className="mx-auto grid max-w-6xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {BENEFICES.map(({ Icone, titre, texte }, index) => (
             <Apparition key={titre} delai={index * 80} echelle>
-              <div className="h-full rounded-2xl border border-white/10 bg-(--surface) p-6">
+              <div className="h-full rounded-2xl border border-white/10 bg-(--surface) p-8">
                 <div
-                  className="flex h-12 w-12 items-center justify-center rounded-full"
+                  className="flex h-14 w-14 items-center justify-center rounded-full"
                   style={{ background: "color-mix(in srgb, var(--or) 18%, transparent)", color: "var(--or)" }}
                 >
-                  <Icone />
+                  <Icone size={28} />
                 </div>
-                <h3 className="mt-4 font-bold text-white">{titre}</h3>
+                <h3 className="mt-5 font-bold text-white">{titre}</h3>
                 <p className="mt-2 text-sm text-white/60">{texte}</p>
               </div>
             </Apparition>
@@ -171,85 +185,20 @@ export default async function PageAccueil() {
         </div>
       </section>
 
-      {/* DÉMO */}
-      <section className="px-6 py-20 sm:px-8">
-        <Apparition>
-          <h2
-            className="mx-auto max-w-2xl text-center font-bold text-white"
-            style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
-          >
-            Voyez à quoi ressemble votre futur site
-          </h2>
-        </Apparition>
-
-        <Apparition delai={150}>
-          <div className="mx-auto mt-12 max-w-3xl">
-            <div className="overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
-              <div className="flex items-center gap-2 bg-black/40 px-4 py-3">
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-                <span className="h-3 w-3 rounded-full bg-white/15" />
-                <span className="ml-3 truncate rounded-full bg-white/10 px-3 py-1 text-xs text-white/50">
-                  nehma.app/weltare
-                </span>
-              </div>
-              <div className="relative aspect-16/10 bg-(--surface)">
-                {photoApercu ? (
-                  <Image
-                    src={photoApercu}
-                    alt={`Aperçu du site de ${weltare?.nom ?? "Weltare"}`}
-                    fill
-                    sizes="(min-width: 768px) 768px, 100vw"
-                    className="object-cover"
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center text-white/30">
-                    Aperçu à venir
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="mt-6 text-center">
-              <a
-                href="/weltare"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center font-semibold text-(--or) transition-opacity duration-200 hover:opacity-80"
-              >
-                Explorer le site de démonstration →
-              </a>
-            </div>
-          </div>
-        </Apparition>
-      </section>
-
-      {/* TARIFS */}
-      <section className="px-6 py-20 sm:px-8">
-        <Apparition>
-          <h2
-            className="mx-auto max-w-2xl text-center font-bold text-white"
-            style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
-          >
-            Un tarif simple, sans surprise
-          </h2>
-        </Apparition>
-        <Apparition delai={150}>
-          <div className="mt-12">
-            <SectionTarifs />
-          </div>
-        </Apparition>
-      </section>
+      <SectionDemoTarifs demos={demos} />
 
       {/* FAQ */}
-      <section className="px-6 py-20 sm:px-8">
+      <section className="px-6 py-24 sm:px-8 md:py-32">
         <Apparition>
-          <h2
-            className="mx-auto max-w-2xl text-center font-bold text-white"
-            style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
-          >
-            Questions fréquentes
-          </h2>
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs font-bold tracking-[0.3em] text-(--or) uppercase">Questions</p>
+            <h2
+              className="mt-3 font-bold text-white"
+              style={{ fontSize: "clamp(1.75rem, 4vw, 2.75rem)" }}
+            >
+              Questions fréquentes
+            </h2>
+          </div>
         </Apparition>
         <Apparition delai={150}>
           <div className="mt-12">

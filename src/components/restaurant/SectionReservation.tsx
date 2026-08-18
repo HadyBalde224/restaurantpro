@@ -2,7 +2,13 @@ import Apparition from "@/components/Apparition";
 import TitreSection from "@/components/restaurant/TitreSection";
 import FormulaireReservation from "@/components/restaurant/FormulaireReservation";
 
-export default function SectionReservation({ restaurantId }: { restaurantId: string }) {
+export default function SectionReservation({
+  restaurantId,
+  devise,
+}: {
+  restaurantId: string;
+  devise: string;
+}) {
   return (
     <section
       id="reserver"
@@ -12,7 +18,7 @@ export default function SectionReservation({ restaurantId }: { restaurantId: str
         <TitreSection>Réserver une table</TitreSection>
 
         <div className="mx-auto mt-14 max-w-2xl rounded-2xl border border-black/5 bg-white p-6 shadow-sm sm:p-8">
-          <FormulaireReservation restaurantId={restaurantId} />
+          <FormulaireReservation restaurantId={restaurantId} devise={devise} />
         </div>
       </Apparition>
     </section>

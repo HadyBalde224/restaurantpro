@@ -71,11 +71,12 @@ export default async function PageRestaurant({
         whatsapp={restaurant.whatsapp}
         horaireAujourdhui={horaireAujourdhui}
         aGalerie={(photosGalerie ?? []).length > 0}
+        logoUrl={restaurant.logo_url}
       />
       <Hero restaurant={restaurant} noteMoyenne={noteMoyenne} />
       <SectionMenu categories={categories ?? []} devise={restaurant.devise} />
       <Galerie photos={photosGalerie ?? []} nom={restaurant.nom} />
-      <SectionReservation restaurantId={restaurant.id} />
+      <SectionReservation restaurantId={restaurant.id} devise={restaurant.devise} />
       <SectionAvis avis={avis ?? []} restaurantId={restaurant.id} slug={restaurant.slug} />
       <Horaires horaires={restaurant.horaires} />
       <Localisation

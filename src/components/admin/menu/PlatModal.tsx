@@ -3,6 +3,7 @@
 import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { enregistrerPlat } from "@/app/admin/(protege)/menu/actions";
+import { idUnique } from "@/lib/id";
 import type { CategorieMenu, Plat } from "@/lib/types";
 
 const TAILLE_MAX_OCTETS = 2 * 1024 * 1024; // 2 Mo
@@ -93,7 +94,7 @@ export default function PlatModal({
 
     if (fichier) {
       const extension = fichier.name.split(".").pop() || "jpg";
-      const chemin = `${restaurantId}/plats/${crypto.randomUUID()}.${extension}`;
+      const chemin = `${restaurantId}/plats/${idUnique()}.${extension}`;
 
       const { error: erreurUpload } = await supabase.storage.from("images").upload(chemin, fichier);
 

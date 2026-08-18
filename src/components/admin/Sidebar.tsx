@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -94,24 +95,35 @@ export default function Sidebar({
   nom,
   nomComplet,
   role,
+  logoUrl = null,
 }: {
   nom: string;
   nomComplet: string;
   role: RoleAdmin;
+  logoUrl?: string | null;
 }) {
   const [ouvert, setOuvert] = useState(false);
   const pathname = usePathname();
   const estSuperAdmin = role === "super_admin";
   const liens = estSuperAdmin ? LIENS_PLATEFORME : LIENS;
   const sousTitre = estSuperAdmin ? "Administration de la plateforme" : "Espace de gestion";
+  // Le super-admin représente la plateforme NEHMA, pas un restaurant — pas de logo à afficher.
+  const logo = !estSuperAdmin && logoUrl ? logoUrl : null;
 
   return (
     <>
       {/* Sidebar fixe desktop */}
       <aside className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:w-60 lg:flex-col lg:border-r lg:border-black/5 lg:bg-white">
-        <div className="px-6 py-5">
-          <p className="font-bold text-lg text-gray-900">{nom}</p>
-          <p className="text-sm text-gray-500">{sousTitre}</p>
+        <div className="flex items-center gap-2.5 px-6 py-5">
+          {logo && (
+            <span className="relative h-10 w-10 shrink-0">
+              <Image src={logo} alt="" fill sizes="40px" className="object-contain" />
+            </span>
+          )}
+          <div className="min-w-0">
+            <p className="truncate font-bold text-lg text-gray-900">{nom}</p>
+            <p className="truncate text-sm text-gray-500">{sousTitre}</p>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto py-2">
@@ -133,9 +145,16 @@ export default function Sidebar({
 
       {/* Header simple mobile */}
       <header className="flex items-center justify-between border-b border-black/5 bg-white px-4 py-3 lg:hidden">
-        <div>
-          <p className="font-bold text-gray-900">{nom}</p>
-          <p className="text-xs text-gray-500">{sousTitre}</p>
+        <div className="flex min-w-0 items-center gap-2.5">
+          {logo && (
+            <span className="relative h-10 w-10 shrink-0">
+              <Image src={logo} alt="" fill sizes="40px" className="object-contain" />
+            </span>
+          )}
+          <div className="min-w-0">
+            <p className="truncate font-bold text-gray-900">{nom}</p>
+            <p className="truncate text-xs text-gray-500">{sousTitre}</p>
+          </div>
         </div>
         <button
           type="button"
@@ -164,9 +183,16 @@ export default function Sidebar({
           }`}
         >
           <div className="flex items-center justify-between px-6 py-5">
-            <div>
-              <p className="font-bold text-gray-900">{nom}</p>
-              <p className="text-sm text-gray-500">{sousTitre}</p>
+            <div className="flex min-w-0 items-center gap-2.5">
+              {logo && (
+                <span className="relative h-10 w-10 shrink-0">
+                  <Image src={logo} alt="" fill sizes="40px" className="object-contain" />
+                </span>
+              )}
+              <div className="min-w-0">
+                <p className="truncate font-bold text-gray-900">{nom}</p>
+                <p className="truncate text-sm text-gray-500">{sousTitre}</p>
+              </div>
             </div>
             <button
               type="button"

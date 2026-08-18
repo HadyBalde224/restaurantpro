@@ -4,6 +4,7 @@ import { useState } from "react";
 import type { Reservation } from "@/lib/types";
 import { confirmerReservation, refuserReservation } from "@/app/admin/(protege)/reservations/actions";
 import BadgeStatut from "@/components/admin/BadgeStatut";
+import { indicatifPays } from "@/lib/pays";
 
 function formaterDate(date: string) {
   return new Date(date).toLocaleDateString("fr-FR", {
@@ -32,7 +33,7 @@ function formaterDateDemande(dateIso: string) {
 function formaterTelephoneWhatsApp(telephone: string, devise: string): string {
   const chiffres = telephone.replace(/\D/g, "");
   if (chiffres.startsWith("0")) {
-    const indicatif = devise === "GNF" ? "224" : devise === "DH" ? "212" : "";
+    const indicatif = indicatifPays(devise) ?? "";
     return indicatif + chiffres.slice(1);
   }
   return chiffres;

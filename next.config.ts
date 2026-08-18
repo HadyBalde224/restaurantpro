@@ -6,6 +6,12 @@ import type { NextConfig } from "next";
 const hostnameSupabase = new URL(process.env.NEXT_PUBLIC_SUPABASE_URL!).hostname;
 
 const nextConfig: NextConfig = {
+  // Next.js bloque par défaut les requêtes cross-origin vers le serveur de dev
+  // (protection anti-DNS-rebinding). Sans ça, tester depuis un téléphone via
+  // l'IP locale du PC (ex: http://192.168.1.7:3000) fait échouer silencieusement
+  // le chargement de plusieurs bundles JS (403) : l'app charge en apparence mais
+  // l'hydratation React est cassée par endroits (animations, boutons inertes...).
+  allowedDevOrigins: ["192.168.1.7"],
   images: {
     remotePatterns: [
       {

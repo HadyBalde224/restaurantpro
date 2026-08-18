@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Image from "next/image";
 
 const LIENS_BASE = [
   { href: "#menu", id: "menu", libelle: "Menu" },
@@ -11,16 +12,38 @@ const LIENS_BASE = [
 
 const LIEN_GALERIE = { href: "#galerie", id: "galerie", libelle: "Galerie" };
 
+// Logo à côté du nom (~40px de haut) si le restaurant en a un, sinon le nom
+// seul — comportement de repli identique à avant.
+function LogoEtNom({ logoUrl, nom }: { logoUrl?: string | null; nom: string }) {
+  return (
+    <>
+      {logoUrl && (
+        <span className="relative h-10 w-10 shrink-0">
+          <Image src={logoUrl} alt="" fill sizes="40px" className="object-contain" />
+        </span>
+      )}
+      <span
+        className="truncate text-lg font-bold text-white italic"
+        style={{ fontFamily: "var(--font-titre)" }}
+      >
+        {nom}
+      </span>
+    </>
+  );
+}
+
 export default function Navbar({
   nom,
   whatsapp,
   horaireAujourdhui,
   aGalerie = false,
+  logoUrl = null,
 }: {
   nom: string;
   whatsapp: string;
   horaireAujourdhui: string;
   aGalerie?: boolean;
+  logoUrl?: string | null;
 }) {
   const [scrolled, setScrolled] = useState(false);
   const [ouvert, setOuvert] = useState(false);
@@ -88,7 +111,13 @@ export default function Navbar({
             scrolled ? "h-15" : "h-18"
           }`}
         >
-          <div className="flex min-w-0 flex-col justify-center">
+          <div className="flex min-w-0 items-center gap-2.5">
+            {logoUrl && (
+              <span className="relative h-10 w-10 shrink-0">
+                <Image src={logoUrl} alt="" fill sizes="40px" className="object-contain" />
+              </span>
+            )}
+            <div className="flex min-w-0 flex-col justify-center">
             <span
               className="truncate text-lg font-bold text-white italic"
               style={{ fontFamily: "var(--font-titre)" }}
@@ -103,6 +132,7 @@ export default function Navbar({
                 Aujourd&apos;hui : {horaireAujourdhui}
               </span>
             )}
+            </div>
           </div>
 
           <div className="hidden items-center gap-8 lg:flex">
@@ -167,12 +197,9 @@ export default function Navbar({
         aria-hidden={!ouvert}
       >
         <div className="flex h-18 shrink-0 items-center justify-between px-6">
-          <span
-            className="truncate text-lg font-bold text-white italic"
-            style={{ fontFamily: "var(--font-titre)" }}
-          >
-            {nom}
-          </span>
+          <div className="flex min-w-0 items-center gap-2.5">
+            <LogoEtNom logoUrl={logoUrl} nom={nom} />
+          </div>
           <button
             type="button"
             onClick={() => setOuvert(false)}
@@ -192,11 +219,12 @@ export default function Navbar({
               href={lien.href}
               onClick={() => setOuvert(false)}
               tabIndex={ouvert ? 0 : -1}
-              className={`min-h-11 py-1 text-4xl font-bold text-white transition-all duration-300 ${
+              className={`min-h-11 py-1 font-bold text-white transition-all duration-300 ${
                 ouvert ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
               }`}
               style={{
                 fontFamily: "var(--font-titre)",
+                fontSize: "clamp(1.75rem, 8vw, 2.75rem)",
                 transitionDelay: ouvert ? `${index * 60}ms` : "0ms",
               }}
             >
