@@ -13,6 +13,7 @@ import {
   IconeBurger,
   IconeCroix,
   IconePlus,
+  IconeGalerie,
 } from "@/components/admin/Icones";
 import BoutonDeconnexion from "@/components/admin/BoutonDeconnexion";
 import type { RoleAdmin } from "@/lib/types";
@@ -22,6 +23,7 @@ const LIENS = [
   { href: "/admin/menu", libelle: "Menu", Icone: IconeMenu },
   { href: "/admin/reservations", libelle: "Réservations", Icone: IconeCalendrier },
   { href: "/admin/avis", libelle: "Avis", Icone: IconeEtoile },
+  { href: "/admin/galerie", libelle: "Galerie", Icone: IconeGalerie },
   { href: "/admin/reglages", libelle: "Réglages", Icone: IconeReglages },
 ];
 
