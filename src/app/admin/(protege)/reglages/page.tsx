@@ -8,6 +8,7 @@ import CarteHoraires from "@/components/admin/reglages/CarteHoraires";
 import CarteApparence from "@/components/admin/reglages/CarteApparence";
 import CarteReseauxSociaux from "@/components/admin/reglages/CarteReseauxSociaux";
 import CarteLocalisation from "@/components/admin/reglages/CarteLocalisation";
+import CartePartage from "@/components/admin/reglages/CartePartage";
 
 export default async function PageReglagesAdmin() {
   const supabase = await createClient();
@@ -49,6 +50,7 @@ export default async function PageReglagesAdmin() {
       </div>
 
       <CarteIdentite restaurant={restaurant} />
+      <CartePartage restaurant={restaurant} />
       <CarteContact restaurant={restaurant} />
       <CarteHoraires horaires={restaurant.horaires} />
       <CarteApparence restaurant={restaurant} />

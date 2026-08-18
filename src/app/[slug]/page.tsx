@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getRestaurant } from "@/lib/restaurant";
 import { createClient } from "@/lib/supabase/server";
@@ -13,6 +14,38 @@ import Localisation from "@/components/restaurant/Localisation";
 import Footer from "@/components/restaurant/Footer";
 import BoutonWhatsApp from "@/components/restaurant/BoutonWhatsApp";
 import PanierFlottant from "@/components/restaurant/PanierFlottant";
+
+// L'image (og:image) est gérée séparément par le fichier opengraph-image.tsx
+// du même dossier — priorité automatique de Next.js sur toute image définie
+// ici, donc pas la peine de la dupliquer.
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  // Même fonction cache() que la page : aucune requête Supabase supplémentaire.
+  const restaurant = await getRestaurant(slug);
+
+  if (!restaurant) {
+    return { title: "Restaurant introuvable — NEHMA" };
+  }
+
+  const description =
+    restaurant.description?.trim() ||
+    `Découvrez ${restaurant.nom}, propulsé par NEHMA : menu, réservations et commandes en ligne.`;
+
+  return {
+    title: `${restaurant.nom} — Menu, réservations et avis`,
+    description,
+    openGraph: {
+      title: restaurant.nom,
+      description,
+      siteName: "NEHMA",
+      type: "website",
+    },
+  };
+}
 
 export default async function PageRestaurant({
   params,

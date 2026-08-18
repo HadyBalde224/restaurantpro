@@ -14,7 +14,14 @@ const karla = Karla({
   display: "swap",
 });
 
+// VERCEL_URL est fourni automatiquement par Vercel une fois déployé (pas de
+// configuration manuelle nécessaire) ; en local, on retombe sur localhost.
+const origine = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(origine),
   title: "NEHMA",
   description: "Sites vitrines pour restaurants",
 };
